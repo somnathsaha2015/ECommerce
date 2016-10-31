@@ -8,7 +8,6 @@ var messages = require('./artifacts/messages');
 var express = require('express');
 var app = express();
 
-
 app.set('messages', messages);
 app.set('def', def);
 app.set('config', config);
