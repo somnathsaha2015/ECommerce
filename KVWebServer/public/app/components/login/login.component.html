@@ -1,0 +1,19 @@
+<div class="jumbotron container">
+	<h2>Login</h2>
+    <a routerLink='/order' routerLinkActive="active">Order</a>
+    <div class='row'>
+        <span class='col-md-1'>Email:</span>
+        <input class='col-md-2' type="text" [(ngModel)]="email">
+    </div>
+    <div class='row'>
+        <span class='col-md-1'>Password:</span>
+        <input class='col-md-2'  type="password" #pwd>
+    </div>
+    <div class='row'>
+        <span class='col-md-1'></span>
+	    <button class="col-md-2 btn btn-success" (click)="authenticate(pwd.value)" >Submit</button>
+        <a routerLink='/forgot/password' class='col-md-2'>Forgot password</a>
+        <button class="btn col-md-3" (click)="logout()">Log out</button>
+    </div>
+
+</div>
