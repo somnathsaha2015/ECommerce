@@ -12,4 +12,4 @@
 9. Modify the sendMail parameters. This is the mail server from where you will send mail to users.  
 10. Rename the file sampleConfig.json as config.json.
 11. Start the node server as "node server.js".  
-12. Browse "http://localhost:6120"  
+12. Browse at "http://localhost:6120"  
