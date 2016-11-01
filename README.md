@@ -1,6 +1,6 @@
 # ECommerce
-This is seed project for ECommerce built using Nodejs and Angular 2.  
-Steps to install this seed project locally:  
+## This is seed project for ECommerce built using Nodejs and Angular 2.  
+### Steps to install this seed project locally:  
 1. Install node.js.  
 2. Go to folder KVWebServer.  
 3. Give command "npm install". This will install the dependencies for web server.  
