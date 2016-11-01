@@ -41,17 +41,7 @@ Node Server
 1. New user save
 2. Order save
 3. Get order history
-4. 
 
-Documentation
-
-27-10-2016: target
-1. Error management client / server confirm
-2. Auto include token in every secured page
-3. Token validation at server side
-4. Naming finalize
-5. Organize code
-6. Github workings
 
 Status codes
 200: OK
@@ -72,38 +62,3 @@ Status codes
 502: Bad Gateway
 503: Service Unavailable
 520: Unknown error
-
-
-/*
-@Injectable()
-export class LoginGuard implements CanActivate {
-    loggedinSubject: AsyncSubject<boolean> = new AsyncSubject<boolean>();
-    canActivate() {
-        var token = localStorage.getItem('token');
-        var observable: Observable<boolean>;// = Observable.from([true]);
-        var loggedinSubject1: AsyncSubject<boolean> = new AsyncSubject<boolean>();
-        if (token) {
-            this.appService.on('post:validateToken')
-                .subscribe(
-                d => {
-                    console.log(d.data);
-                    observable = Observable.from([true]);
-                    return (observable);
-                    //this.loggedinSubject.next(d.data);
-                });
-            this.appService.httpPost('post:validateToken', { token: token });
-            //observable = Observable.from([true]);
-            //loggedinSubject1.next(true);
-        } else {
-            //loggedinSubject1.next(true);
-            observable = Observable.from([false]);
-            return (observable);
-        }
-        //return observable;
-        //return loggedinSubject1;
-    };
-    constructor(private appService: AppService) {
-        this.loggedinSubject = new AsyncSubject<boolean>();
-    }
-}
-*/
