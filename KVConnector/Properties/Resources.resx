@@ -136,6 +136,6 @@
     <value>Either user name or password is incorrect</value>
   </data>
   <data name="MessGenericError" xml:space="preserve">
-    <value>Operation could not be performed succesfully. There was some error.</value>
+    <value>Operation could not be performed. There was some error</value>
   </data>
 </root>

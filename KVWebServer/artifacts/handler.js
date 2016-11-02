@@ -125,7 +125,7 @@ function sendMail(res, next, email, body, htmlBody) {
             port: config.sendMail.port,
             secure: config.sendMail.secure, // use SSL
             auth: {
-                user: config.sendMail.user,
+                user: config.sendMail.fromUser,
                 pass: config.sendMail.password
             }
         }

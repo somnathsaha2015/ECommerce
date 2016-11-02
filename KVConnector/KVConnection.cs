@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using KVConnector.Properties;
 using TBSeed;
+using System.Transactions;
 
 namespace KVConnector
 {
@@ -210,18 +211,27 @@ namespace KVConnector
                                 paramsList.Add(new SqlParameter("email", email));
                                 paramsList.Add(new SqlParameter("oldPwdHash", oldPwdHash));
                                 var isExist = seedDataAccess.ExecuteScalar(SqlResource.IsEmailExist, paramsList);
-                                if (isExist != null) // email and password hash exists in database. Now change password Hash
-                                {
-                                    paramsList = new List<SqlParameter>();
-                                    paramsList.Add(new SqlParameter("email", email));
-                                    paramsList.Add(new SqlParameter("oldPwdHash", oldPwdHash));
-                                    paramsList.Add(new SqlParameter("newPwdHash", newPwdHash));
-                                    int ret = seedDataAccess.ExecuteNonQuery(SqlResource.ChangePasswordHash, paramsList);
-                                    if(ret == 1)
+                                
+                                    if (isExist != null) // email and password hash exists in database. Now change password Hash
                                     {
-                                        success = true;
+                                        paramsList = new List<SqlParameter>();
+                                        paramsList.Add(new SqlParameter("email", email));
+                                        paramsList.Add(new SqlParameter("oldPwdHash", oldPwdHash));
+                                        paramsList.Add(new SqlParameter("newPwdHash", newPwdHash));
+                                    using (TransactionScope scope = new TransactionScope())
+                                    {
+                                        int ret = seedDataAccess.ExecuteNonQuery(SqlResource.ChangePasswordHash, paramsList);
+                                        if (ret == 1)
+                                        {
+                                            success = true;
+                                            MailItem item = new MailItem()
+                                            {
+                                                
+                                            };
+                                        }
                                     }
                                 }
+                                   
                             }
                         }
                     }

@@ -115,7 +115,7 @@ namespace KVConnector.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operation could not be performed succesfully. There was some error..
+        ///   Looks up a localized string similar to Operation could not be performed. There was some error.
         /// </summary>
         internal static string MessGenericError {
             get {

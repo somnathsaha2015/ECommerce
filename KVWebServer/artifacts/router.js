@@ -128,7 +128,15 @@ router.post('/api/change/password', function (req, res, next) {
     try {
         let auth = req.body.auth;
         if (auth) {
-            var data = { action: 'changePassword', auth: auth };
+            var data = { action: 'changePassword', auth: auth
+            ,sendMail:{
+                host:config.sendmail.host,
+                port:config.sendMail.port,
+                user:config.sendMail.user,
+                password:config.sendMail.password,
+                successBody:config.changePasswordSuccessMailBody,
+                subject:config.config.changePasswordMailSubject
+            }};
             handler.edgePush(res, next, 'changePassword', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
