@@ -83,12 +83,16 @@ filterOn('forgotPassowrd').subscribe(d => {
     if (d.result) {
         if (d.result.error) {
             d.next(d.result.error);
-        } else {
-            let body = config.forgotPasswordMailBody;
-            let emailToken = jwt.sign(d.result.email, config.jwtKey);
+        } else {            
+            let body = config.forgotPassword.mailBody;
+            let emailToken = jwt.sign({data:d.result.email}, config.jwtKey,{expiresIn:"1d"});
             let sendPasswordUrl = config.host + "/send/password?code=" + emailToken;
-            body = body + " " + sendPasswordUrl;
-            sendMail(d.res, d.next, d.result.email, body);
+            body = body + "  " + sendPasswordUrl;
+            let emailItem=config.sendMail;
+            emailItem.htmlBody = body;
+            emailItem.subject=config.forgotPassword.subject;
+            emailItem.to=d.result.email;
+            sendMail(d.res, d.next, emailItem);
         }
     } else {
         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
@@ -116,26 +120,27 @@ filterOn('changePassword').subscribe(d => {
 });
 
 //send mail
-function sendMail(res, next, email, body, htmlBody) {
+function sendMail(res, next, emailItem) {
     //let decodedEmail = Buffer.from(auth, 'base64').toString();
     let emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    if (emailFilter.test(email)) {
+    if (emailFilter.test(emailItem.to)) {
         var options = {
-            host: config.sendMail.host,
-            port: config.sendMail.port,
-            secure: config.sendMail.secure, // use SSL
+            host: emailItem.host,
+            port: emailItem.port,
+            secure: emailItem.secure, // for port 587 SSL is not required
             auth: {
-                user: config.sendMail.fromUser,
-                pass: config.sendMail.password
+                user: emailItem.fromUser,
+                pass: emailItem.fromUserPassword
             }
         }
         var transporter = nodemailer.createTransport(options);
         var mailOptions = {
-            from: '"Capital ch2 👥" <capitalch2@gmail.com>', // sender address
-            to: email, // list of receivers
-            subject: 'Hello ✔', // Subject line
-            text: body // plaintext body
-            , html: htmlBody // html body
+            from1: '"Capital ch2 👥" <capitalch2@gmail.com>', // sender address
+            from: `$(emailItem.fromUserName)👥 <$(emailItem.fromUser)>`,      
+            to: emailItem.to, // list of receivers
+            subject: emailItem.subject // Subject line
+            //,text: body // plaintext body
+            , html: emailItem.htmlBody // html body
         };
         // send mail with defined transport object
         transporter.sendMail(mailOptions, function (error, info) {

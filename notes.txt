@@ -1,16 +1,21 @@
+//Immediate work
+1. .NET mail
+2. In Transaction mail
+3. Create New Password
+4. Forgot Pwd
+5. Create New Account
+6. Create Order
+7. Confirm Order
+8. Receipt Order
+9. Wizard
+10. Wait show
+11. Client side validations
+12. Speed up RXjs
+13. JWT duration 24 hours
+
 //Authentication
 https://medium.com/@blacksonic86/angular-2-authentication-revisited-611bf7373bf9#.3c66v2lzc
-
-		1. Two way binding with input control
-		2. Hash and base 64 encryption
-		3. Rxjs send to server
-		4. Node decode base 64
-		5. Create database table, put in user name, hash, Role
-		6. .Net provide code
-		7. .net validate with database
-		8. Node create JWT
-		9. Send token to client and client prints token.
-
+		
 Research
 1. Auto include token in page
 2. Customer database
