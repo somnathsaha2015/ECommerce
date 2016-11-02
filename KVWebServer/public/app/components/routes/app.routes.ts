@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
-import { Login } from '../login/login.component';
+import { Login,CreateAccount } from '../login/login.component';
 import {ForgotPassword, SendPassword, ChangePassword } from '../forgotPassword/forgotPassword.component';
 import { Order } from '../order/order.component';
 import {LoginGuard} from '../../services/app.service';
@@ -32,6 +32,10 @@ const routes: Routes = [
         path:'change/password',
         component: ChangePassword
         ,canActivate:[LoginGuard]
+    },
+    {
+        path:'create/account',
+        component:CreateAccount
     },
     {
         path:'**',

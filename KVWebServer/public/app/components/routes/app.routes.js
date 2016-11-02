@@ -33,6 +33,10 @@ var routes = [
         canActivate: [app_service_1.LoginGuard]
     },
     {
+        path: 'create/account',
+        component: login_component_1.CreateAccount
+    },
+    {
         path: '**',
         redirectTo: '/login',
         pathMatch: 'full'

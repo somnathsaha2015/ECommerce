@@ -57,4 +57,26 @@ var Login = (function () {
     return Login;
 }());
 exports.Login = Login;
+var CreateAccount = (function () {
+    function CreateAccount(appService, router) {
+        this.appService = appService;
+        this.router = router;
+    }
+    ;
+    CreateAccount.prototype.createAccount = function (pwd, confirmPwd) {
+    };
+    ;
+    CreateAccount.prototype.ngOnDestroy = function () {
+        //this.subscription.unsubscribe();
+    };
+    ;
+    CreateAccount = __decorate([
+        core_1.Component({
+            templateUrl: 'app/components/login/createAccount.component.html'
+        }), 
+        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
+    ], CreateAccount);
+    return CreateAccount;
+}());
+exports.CreateAccount = CreateAccount;
 //# sourceMappingURL=login.component.js.map

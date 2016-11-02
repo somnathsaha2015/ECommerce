@@ -42,5 +42,13 @@ namespace KVConnector
         }
         #endregion        
 
+        #region sendMail   
+        public static void sendMail()
+        {
+            
+        }
+        #endregion 
+
+
     }
 }

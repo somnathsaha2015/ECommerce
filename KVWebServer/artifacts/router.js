@@ -139,11 +139,10 @@ router.post('/api/change/password', function (req, res, next) {
         next(err);
     }
 });
-// apiRouter.get('/api/order', function (req, res) {
-//     //res.sendFile(path.join(__dirname, 'public','index1.html'));
-//     console.log('order requested');
-//     res.json({ date: 'This is order' });
-// });
+router.get('/api/order', function (req, res) {
+    console.log('send order');
+    res.json({ date: 'This is order' });
+});
 // apiRouter.post('/sale', function (req, res, next) {
 //     var user = req.user;
 //     var data = { "action": "addSales", authorize: { apiApplicationName: 'sale', httpMethod: req.method, user: user }, innerData: { sale: req.body } };
