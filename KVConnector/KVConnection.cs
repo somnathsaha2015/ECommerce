@@ -31,8 +31,9 @@ namespace KVConnector
                 RoutingDictionary.Add("authenticate", AuthenticateAsync);
                 RoutingDictionary.Add("isEmailExist", IsEmailExistAsync);
                 RoutingDictionary.Add("changePassword", ChangePasswordAsync);
+                RoutingDictionary.Add("newPassword", NewPasswordAsync);
             }
-        } 
+        }
         #endregion
 
         #region Invoke
@@ -153,18 +154,18 @@ namespace KVConnector
                     {
                         string email = objDictionary["email"].ToString();
                         result.email = email;
-                        List <SqlParameter> paramsList = new List<SqlParameter>();
+                        List<SqlParameter> paramsList = new List<SqlParameter>();
                         paramsList.Add(new SqlParameter("email", email));
                         var isExist = seedDataAccess.ExecuteScalar(SqlResource.IsEmailExist, paramsList);
-                        if(isExist != null)
+                        if (isExist != null)
                         {
                             success = true;
-                        }                                           
+                        }
                     }
                     if (success)
                     {
                         result.status = 200;
-                        result.isEmailExist = true;                        
+                        result.isEmailExist = true;
                     }
                     else
                     {
@@ -211,27 +212,131 @@ namespace KVConnector
                                 paramsList.Add(new SqlParameter("email", email));
                                 paramsList.Add(new SqlParameter("oldPwdHash", oldPwdHash));
                                 var isExist = seedDataAccess.ExecuteScalar(SqlResource.IsEmailExist, paramsList);
-                                
-                                    if (isExist != null) // email and password hash exists in database. Now change password Hash
-                                    {
-                                        paramsList = new List<SqlParameter>();
-                                        paramsList.Add(new SqlParameter("email", email));
-                                        paramsList.Add(new SqlParameter("oldPwdHash", oldPwdHash));
-                                        paramsList.Add(new SqlParameter("newPwdHash", newPwdHash));
-                                    using (TransactionScope scope = new TransactionScope())
+                                if (isExist != null) // email and password hash exists in database. Now change password Hash
+                                {
+                                    paramsList = new List<SqlParameter>();
+                                    paramsList.Add(new SqlParameter("email", email));
+                                    paramsList.Add(new SqlParameter("oldPwdHash", oldPwdHash));
+                                    paramsList.Add(new SqlParameter("newPwdHash", newPwdHash));
+                                    if (objDictionary.ContainsKey("emailItem"))
                                     {
                                         int ret = seedDataAccess.ExecuteNonQuery(SqlResource.ChangePasswordHash, paramsList);
                                         if (ret == 1)
                                         {
-                                            success = true;
+                                            var emailItem = (dynamic)objDictionary["emailItem"];
                                             MailItem item = new MailItem()
                                             {
-                                                
+                                                From = emailItem.fromUser,
+                                                FromName = emailItem.fromUserName,
+                                                Host = emailItem.host,
+                                                IsBodyHtml = true,
+                                                Body = emailItem.htmlBody,
+                                                Password = emailItem.fromUserPassword,
+                                                Port = emailItem.port,
+                                                Subject = emailItem.subject,
+                                                To = email
                                             };
+                                            try
+                                            {
+                                                Util.SendMail(item);
+                                                success = true;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                //failure,  revert back
+                                                paramsList = new List<SqlParameter>();
+                                                paramsList.Add(new SqlParameter("email", email));
+                                                paramsList.Add(new SqlParameter("newPwdHash", oldPwdHash));
+                                                ret = seedDataAccess.ExecuteNonQuery(SqlResource.NewPasswordHash, paramsList);
+                                            }
                                         }
                                     }
                                 }
-                                   
+                            }
+                        }
+                    }
+                    if (success)
+                    {
+                        result.status = 200;
+                        result.changedPwdHash = true;
+                    }
+                    else
+                    {
+                        Util.setError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = new ExpandoObject();
+                    Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                }
+                return (result);
+            });
+            result = await t;
+            return (result);
+        }
+        #endregion
+
+        #region NewPasswordAsync
+        public async Task<object> NewPasswordAsync(dynamic obj)
+        {
+            dynamic result = new ExpandoObject();
+            string oldPwdHash = string.Empty;
+            Task<object> t = Task.Run<object>(() =>
+            {
+                try
+                {
+                    IDictionary<string, object> objDictionary = (IDictionary<string, object>)obj;
+                    bool success = false;
+
+                    string alph = Guid.NewGuid().ToString().Substring(0, 8);
+                    string hash = Util.getMd5Hash(alph);
+                    if (objDictionary.ContainsKey("data"))
+                    {
+                        dynamic emailObject = (dynamic)objDictionary["data"];
+                        string email = emailObject.to;
+                        emailObject.htmlBody = emailObject.htmlBody.Replace("@pwd", alph);
+                        if (!string.IsNullOrEmpty(email))
+                        {
+                            {
+                                List<SqlParameter> paramsList = new List<SqlParameter>();
+                                paramsList.Add(new SqlParameter("email", email));
+                                oldPwdHash = seedDataAccess.ExecuteScalarAsString(SqlResource.GetPwdHash, paramsList);
+                                if (!string.IsNullOrEmpty(oldPwdHash)) // email exists in database. Now change password Hash
+                                {
+                                    paramsList = new List<SqlParameter>();
+                                    paramsList.Add(new SqlParameter("email", email));
+                                    paramsList.Add(new SqlParameter("newPwdHash", hash));
+                                    int ret = seedDataAccess.ExecuteNonQuery(SqlResource.NewPasswordHash, paramsList);
+                                    if (ret > 0)
+                                    {
+                                        MailItem item = new MailItem()
+                                        {
+                                            From = emailObject.fromUser,
+                                            FromName = emailObject.fromUserName,
+                                            Host = emailObject.host,
+                                            IsBodyHtml = true,
+                                            Body = emailObject.htmlBody,
+                                            Password = emailObject.fromUserPassword,
+                                            Port = emailObject.port,
+                                            Subject = emailObject.subject,
+                                            To = emailObject.to
+                                        };
+                                        try
+                                        {
+                                            Util.SendMail(item);
+                                            success = true;
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //revert back
+                                            paramsList = new List<SqlParameter>();
+                                            paramsList.Add(new SqlParameter("email", email));
+                                            paramsList.Add(new SqlParameter("newPwdHash", oldPwdHash));
+                                            ret = seedDataAccess.ExecuteNonQuery(SqlResource.NewPasswordHash, paramsList);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

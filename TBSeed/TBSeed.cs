@@ -101,10 +101,36 @@ public void LoadDataSet(string sqlText, List<SqlParameter> parms, DataSet ds, st
       Object obj = db.ExecuteScalar(cmd);
       return (obj);
     }
-    #endregion
+        #endregion
+
+    #region ExecuteScalarAsString
+        public string ExecuteScalarAsString(string sqlText)
+        {
+            var ret = string.Empty;
+            Object obj = db.ExecuteScalar(CommandType.Text, sqlText);
+            if (obj != null)
+            {
+                ret = obj.ToString();
+            }
+            return (ret);
+        }
+
+        public string ExecuteScalarAsString(string sqlText, List<SqlParameter> parms)
+        {
+            var ret = string.Empty;
+            DbCommand cmd = db.GetSqlStringCommand(sqlText);
+            cmd.Parameters.AddRange(parms.ToArray<SqlParameter>());
+            Object obj = db.ExecuteScalar(cmd);
+            if(obj != null)
+            {
+                ret = obj.ToString();
+            }
+            return (ret);
+        }
+        #endregion
 
     #region ExecuteNonQuery
-    public int ExecuteNonQuery(string sqlText)
+        public int ExecuteNonQuery(string sqlText)
     {
       int iRecords = db.ExecuteNonQuery(CommandType.Text, sqlText);
       return (iRecords);

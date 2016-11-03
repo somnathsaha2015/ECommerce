@@ -16,7 +16,8 @@ export class ForgotPassword {
         if (d.data.error) {
           console.log(d.data.error.status)
         } else {
-          console.log('Success');          
+          console.log('Success');
+          this.router.navigate(['/login']);
         }
       });
   };
@@ -43,7 +44,8 @@ export class SendPassword {
         if (d.data.error) {
           console.log(d.data.error.status)
         } else {
-          console.log('Success');          
+          console.log('Success');
+          this.router.navigate(['/login']);
         }
       });
   };
@@ -59,7 +61,7 @@ export class SendPassword {
 
 //change password component
 @Component({
-  templateUrl:'app/components/forgotPassword/changePassword.component.html'
+  templateUrl: 'app/components/forgotPassword/changePassword.component.html'
 })
 export class ChangePassword {
   subscription: Subscription;
@@ -67,19 +69,28 @@ export class ChangePassword {
     this.subscription = appService.filterOn('post:change:password')
       .subscribe(d => {
         if (d.data.error) {
-          console.log(d.data.error.status)
+          console.log(d.data.error.status);
         } else {
-          console.log('Success');          
-        }
+          this.appService.resetCredential();
+          console.log('Success');
+        }        
+          this.router.navigate(['/login']);
       });
   };
-  changePassword(oldPwd1, oldPwd2, newPwd) {
-    let email = this.appService.getEmail();
-    if (oldPwd1 === oldPwd2) {
-      let base64Encoded = this.appService.encodeBase64(email + ':' + md5(oldPwd1) + ':' + md5(newPwd));
-      console.log(base64Encoded);
-      this.appService.httpPost('post:change:password', { auth: base64Encoded });
-    }    
+  changePassword(oldPwd, newPwd1, newPwd2) {
+    let credential = this.appService.getCredential();
+    if (credential) {
+      let email = credential.email;
+      if (email) {
+        if (newPwd1 === newPwd2) {
+          let base64Encoded = this.appService.encodeBase64(email + ':' + md5(oldPwd) + ':' + md5(newPwd1));
+          console.log(base64Encoded);
+          this.appService.httpPost('post:change:password', { auth: base64Encoded, token: credential.token });
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    }
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

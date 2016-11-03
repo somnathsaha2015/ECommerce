@@ -6,6 +6,8 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Data.SqlClient;
 using System.Data;
+using System.Net.Mail;
+using System.Net;
 //using TBUtility;
 
 namespace KVConnector
@@ -42,10 +44,38 @@ namespace KVConnector
         }
         #endregion        
 
-        #region sendMail   
-        public static void sendMail()
+        #region SendMail   
+        public static void SendMail(MailItem mailItem)
         {
-            
+            MailMessage mess = new MailMessage();
+            mess.To.Add(mailItem.To);
+            mess.From = new MailAddress(mailItem.From,null,Encoding.UTF8);
+            mess.Subject = mailItem.Subject;
+            mess.SubjectEncoding = Encoding.UTF8;
+            mess.Body = mailItem.Body;
+            mess.BodyEncoding = Encoding.UTF8;
+            mess.IsBodyHtml = true;
+            mess.Priority = MailPriority.High;
+            SmtpClient client = new SmtpClient();
+            client.Credentials = new NetworkCredential(mailItem.From, mailItem.Password);
+            client.Port = mailItem.Port;
+            client.Host = mailItem.Host;
+            client.EnableSsl = true;
+            client.Send(mess);
+            //mess.To.Add("sagarwal@netwoven.com");
+            //mess.From = new MailAddress("capitalch2@gmail.com", "Email header", System.Text.Encoding.UTF8);
+            //mess.Subject = "This mail is send as test";
+            //mess.SubjectEncoding = System.Text.Encoding.UTF8;
+            //mess.Body = "This is Email Body";
+            //mess.BodyEncoding = System.Text.Encoding.UTF8;
+            //mess.IsBodyHtml = true;
+            //mess.Priority = MailPriority.High;
+            //SmtpClient client = new SmtpClient();
+            //client.Credentials = new NetworkCredential("capitalch2@gmail.com", "su$hant123");
+            //client.Port = 587;
+            ////client.Port = 465;
+            //client.Host = "smtp.gmail.com";
+            //client.EnableSsl = true;
         }
         #endregion 
 

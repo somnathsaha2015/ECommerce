@@ -12,9 +12,14 @@ namespace KVConsoleTest
     {
         static void Main(string[] args)
         {
-            SendMail();
+            //SendMail();
+            RandomAlphaNumeric();
         }
 
+        private static void RandomAlphaNumeric()
+        {
+            var alph = Guid.NewGuid().ToString().Substring(0, 8);
+        }
         private static void SendMail()
         {
             

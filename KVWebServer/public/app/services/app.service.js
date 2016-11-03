@@ -27,24 +27,37 @@ var AppService = (function () {
         this.channel = {};
     }
     ;
-    AppService.prototype.setEmail = function (email) {
-        this.globalHash[email] = email;
-    };
-    AppService.prototype.getEmail = function () {
-        var ret = this.globalHash['email'];
-        if (ret) {
-            return (ret);
-        }
-        else {
-            return (null);
-        }
-    };
-    AppService.prototype.resetEmail = function () {
-        delete this.globalHash['email'];
-    };
-    // setToken(_token) {
-    //     this.token = _token;
+    // setEmail(email) {
+    //     this.globalHash[email] = email;
     // }
+    // getEmail(): string {
+    //     let ret = this.globalHash['email'];
+    //     if (ret) {
+    //         return (ret);
+    //     } else {
+    //         return (null);
+    //     }
+    // }
+    // resetEmail() {
+    //     delete this.globalHash['email'];
+    // }
+    AppService.prototype.setCredential = function (email, token) {
+        var credential = { email: email, token: token };
+        localStorage.setItem('credential', JSON.stringify(credential));
+    };
+    ;
+    AppService.prototype.getCredential = function () {
+        var credentialString = localStorage.getItem('credential');
+        var credential = null;
+        if (credentialString) {
+            credential = JSON.parse(credentialString);
+        }
+        return (credential);
+    };
+    ;
+    AppService.prototype.resetCredential = function () {
+        localStorage.removeItem('credential');
+    };
     AppService.prototype.httpPost = function (id, body) {
         var _this = this;
         var url = config_1.urlHash[id];
@@ -163,12 +176,15 @@ var LoginGuard = (function () {
         // Not using but worth knowing about
         next, state) {
         var ret = false;
-        var token = localStorage.getItem('token');
-        if (token) {
-            ret = this.isLoggedIn(token);
-        }
-        else {
-            this.router.navigate(['/login']);
+        var credential = this.appService.getCredential();
+        if (credential) {
+            var token = credential.token;
+            if (token) {
+                ret = this.isLoggedIn(token);
+            }
+            else {
+                this.router.navigate(['/login']);
+            }
         }
         return (ret);
     };

@@ -14,6 +14,7 @@ var app_service_1 = require('../../services/app.service');
 var md5_1 = require('../../vendor/md5');
 var ForgotPassword = (function () {
     function ForgotPassword(appService, router) {
+        var _this = this;
         this.appService = appService;
         this.router = router;
         this.subscription = appService.filterOn('post:forgot:password')
@@ -23,6 +24,7 @@ var ForgotPassword = (function () {
             }
             else {
                 console.log('Success');
+                _this.router.navigate(['/login']);
             }
         });
     }
@@ -46,6 +48,7 @@ exports.ForgotPassword = ForgotPassword;
 //send password component
 var SendPassword = (function () {
     function SendPassword(appService, router) {
+        var _this = this;
         this.appService = appService;
         this.router = router;
         this.subscription = appService.filterOn('post:send:password')
@@ -55,6 +58,7 @@ var SendPassword = (function () {
             }
             else {
                 console.log('Success');
+                _this.router.navigate(['/login']);
             }
         });
     }
@@ -79,6 +83,7 @@ exports.SendPassword = SendPassword;
 //change password component
 var ChangePassword = (function () {
     function ChangePassword(appService, router) {
+        var _this = this;
         this.appService = appService;
         this.router = router;
         this.subscription = appService.filterOn('post:change:password')
@@ -87,17 +92,27 @@ var ChangePassword = (function () {
                 console.log(d.data.error.status);
             }
             else {
+                _this.appService.resetCredential();
                 console.log('Success');
             }
+            _this.router.navigate(['/login']);
         });
     }
     ;
-    ChangePassword.prototype.changePassword = function (oldPwd1, oldPwd2, newPwd) {
-        var email = this.appService.getEmail();
-        if (oldPwd1 === oldPwd2) {
-            var base64Encoded = this.appService.encodeBase64(email + ':' + md5_1.md5(oldPwd1) + ':' + md5_1.md5(newPwd));
-            console.log(base64Encoded);
-            this.appService.httpPost('post:change:password', { auth: base64Encoded });
+    ChangePassword.prototype.changePassword = function (oldPwd, newPwd1, newPwd2) {
+        var credential = this.appService.getCredential();
+        if (credential) {
+            var email = credential.email;
+            if (email) {
+                if (newPwd1 === newPwd2) {
+                    var base64Encoded = this.appService.encodeBase64(email + ':' + md5_1.md5(oldPwd) + ':' + md5_1.md5(newPwd1));
+                    console.log(base64Encoded);
+                    this.appService.httpPost('post:change:password', { auth: base64Encoded, token: credential.token });
+                }
+            }
+            else {
+                this.router.navigate(['/login']);
+            }
         }
     };
     ChangePassword.prototype.ngOnDestroy = function () {

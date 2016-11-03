@@ -1,8 +1,8 @@
 //Immediate work
-1. .NET mail
-2. In Transaction mail
-3. Create New Password
-4. Forgot Pwd
+		1. .NET mail
+		2. In Transaction mail
+		3. Create New Password
+		4. Forgot Pwd
 5. Create New Account
 6. Create Order
 7. Confirm Order
@@ -11,11 +11,12 @@
 10. Wait show
 11. Client side validations
 12. Speed up RXjs
-13. JWT duration 24 hours
+		13. JWT duration 24 hours
+14. replace new HTML's
 
 //Authentication
 https://medium.com/@blacksonic86/angular-2-authentication-revisited-611bf7373bf9#.3c66v2lzc
-		
+hash: dea5687d7786d43266cf55d7be014530
 Research
 1. Auto include token in page
 2. Customer database

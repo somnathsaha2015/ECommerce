@@ -79,6 +79,15 @@ namespace KVConnector.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to select PwdHash from UserMaster where email = @email;.
+        /// </summary>
+        internal static string GetPwdHash {
+            get {
+                return ResourceManager.GetString("GetPwdHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select 0 from UserMaster where Email = @email and PwdHash = @oldPwdHash;.
         /// </summary>
         internal static string IsEmailAndHashExist {
@@ -93,6 +102,15 @@ namespace KVConnector.Properties {
         internal static string IsEmailExist {
             get {
                 return ResourceManager.GetString("IsEmailExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to update UserMaster set PwdHash = @newPwdHash where email = @email;.
+        /// </summary>
+        internal static string NewPasswordHash {
+            get {
+                return ResourceManager.GetString("NewPasswordHash", resourceCulture);
             }
         }
     }

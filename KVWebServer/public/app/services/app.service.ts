@@ -26,23 +26,35 @@ export class AppService {
         this.subject = new Subject();
         this.channel = {};
     };
-    setEmail(email) {
-        this.globalHash[email] = email;
-    }
-    getEmail():string {
-        let ret = this.globalHash['email'];
-        if (ret) {
-            return (ret);
-        } else{
-            return (null);
-        }
-    }
-    resetEmail() {
-        delete this.globalHash['email'];
-    }
-    // setToken(_token) {
-    //     this.token = _token;
+    // setEmail(email) {
+    //     this.globalHash[email] = email;
     // }
+    // getEmail(): string {
+    //     let ret = this.globalHash['email'];
+    //     if (ret) {
+    //         return (ret);
+    //     } else {
+    //         return (null);
+    //     }
+    // }
+    // resetEmail() {
+    //     delete this.globalHash['email'];
+    // }
+    setCredential(email, token) {
+        let credential = { email: email, token: token };
+        localStorage.setItem('credential', JSON.stringify(credential));
+    };
+    getCredential(): any {
+        let credentialString = localStorage.getItem('credential');
+        let credential = null;
+        if (credentialString) {
+            credential = JSON.parse(credentialString);
+        }
+        return (credential);
+    };
+    resetCredential() {
+        localStorage.removeItem('credential');
+    }
     httpPost(id: string, body?: {}) {
         let url = urlHash[id];
         this.http.post(url, body)
@@ -91,11 +103,14 @@ export class LoginGuard implements CanActivate {
         state: RouterStateSnapshot
     ) {
         let ret: any = false;
-        var token = localStorage.getItem('token');
-        if (token) {
-            ret = this.isLoggedIn(token);
-        } else {
-            this.router.navigate(['/login']);
+        let credential = this.appService.getCredential();
+        if (credential) {
+            let token = credential.token;
+            if (token) {
+                ret = this.isLoggedIn(token);
+            } else {
+                this.router.navigate(['/login']);
+            }
         }
         return (ret);
     };

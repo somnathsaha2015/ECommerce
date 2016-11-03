@@ -16,16 +16,13 @@ export class Login {
         console.log(d);
         if(d.data.error){
           console.log(d.data.error.status)
-          localStorage.removeItem('token');
-          this.appService.resetEmail();
+          appService.resetCredential();          
         } else {
           console.log(d.data.token);
-          localStorage.setItem('token', d.data.token);
-          this.appService.setEmail(this.email);
+          this.appService.setCredential(this.email, d.data.token);
           this.router.navigate(['order']);
         }
-      }
-      );
+      });
   };
   authenticate(pwd) {
     let base64Encoded = this.appService.encodeBase64(this.email + ':' + md5(pwd));
@@ -34,8 +31,8 @@ export class Login {
     this.appService.httpPost('post:authenticate', { auth: base64Encoded });
   };
   logout(){
-    localStorage.removeItem('token');
-    this.router.navigate(['login']);
+    this.appService.resetCredential();  
+    this.router.navigate(['/login']);
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -54,6 +51,6 @@ export class CreateAccount {
     
   };
   ngOnDestroy() {
-    //this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
   };
 }

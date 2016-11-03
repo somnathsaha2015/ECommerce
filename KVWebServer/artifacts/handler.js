@@ -83,15 +83,16 @@ filterOn('forgotPassowrd').subscribe(d => {
     if (d.result) {
         if (d.result.error) {
             d.next(d.result.error);
-        } else {            
+        } else {
             let body = config.forgotPassword.mailBody;
-            let emailToken = jwt.sign({data:d.result.email}, config.jwtKey,{expiresIn:"1d"});
-            let sendPasswordUrl = config.host + "/send/password?code=" + emailToken;
+            let emailToken = jwt.sign({ data: d.result.email }, config.jwtKey, { expiresIn: "1d" });
+            let sendPasswordUrl = `${config.host}/send/password?code=${emailToken}`;
+            sendPasswordUrl = `<a href='${sendPasswordUrl}'>${sendPasswordUrl}</a>`;
             body = body + "  " + sendPasswordUrl;
-            let emailItem=config.sendMail;
+            let emailItem = config.sendMail;
             emailItem.htmlBody = body;
-            emailItem.subject=config.forgotPassword.subject;
-            emailItem.to=d.result.email;
+            emailItem.subject = config.forgotPassword.subject;
+            emailItem.to = d.result.email;
             sendMail(d.res, d.next, emailItem);
         }
     } else {
@@ -119,6 +120,23 @@ filterOn('changePassword').subscribe(d => {
     next(err);
 });
 
+filterOn('newPassword').subscribe(d => {
+    if (d.result) {
+        if (d.result.error) {
+            d.next(d.result.error);
+        } else {
+            d.res.status(200).json({ "newPassword": true });
+        }
+    } else {
+        let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+        next(err);
+    }
+}, e => {
+    let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+    next(err);
+});
+
+
 //send mail
 function sendMail(res, next, emailItem) {
     //let decodedEmail = Buffer.from(auth, 'base64').toString();
@@ -136,7 +154,7 @@ function sendMail(res, next, emailItem) {
         var transporter = nodemailer.createTransport(options);
         var mailOptions = {
             from1: '"Capital ch2 👥" <capitalch2@gmail.com>', // sender address
-            from: `$(emailItem.fromUserName)👥 <$(emailItem.fromUser)>`,      
+            from: `${emailItem.fromUserName}👥 <${emailItem.fromUser}>`,
             to: emailItem.to, // list of receivers
             subject: emailItem.subject // Subject line
             //,text: body // plaintext body

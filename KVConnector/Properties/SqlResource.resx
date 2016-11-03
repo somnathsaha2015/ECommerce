@@ -123,10 +123,16 @@
   <data name="GetHashAndRole" xml:space="preserve">
     <value>select Role,PwdHash from UserMaster where Email = @email;</value>
   </data>
+  <data name="GetPwdHash" xml:space="preserve">
+    <value>select PwdHash from UserMaster where email = @email;</value>
+  </data>
   <data name="IsEmailAndHashExist" xml:space="preserve">
     <value>select 0 from UserMaster where Email = @email and PwdHash = @oldPwdHash;</value>
   </data>
   <data name="IsEmailExist" xml:space="preserve">
     <value>select 0 from UserMaster where Email = @email;</value>
+  </data>
+  <data name="NewPasswordHash" xml:space="preserve">
+    <value>update UserMaster set PwdHash = @newPwdHash where email = @email;</value>
   </data>
 </root>

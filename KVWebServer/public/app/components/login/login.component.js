@@ -22,13 +22,11 @@ var Login = (function () {
             console.log(d);
             if (d.data.error) {
                 console.log(d.data.error.status);
-                localStorage.removeItem('token');
-                _this.appService.resetEmail();
+                appService.resetCredential();
             }
             else {
                 console.log(d.data.token);
-                localStorage.setItem('token', d.data.token);
-                _this.appService.setEmail(_this.email);
+                _this.appService.setCredential(_this.email, d.data.token);
                 _this.router.navigate(['order']);
             }
         });
@@ -42,8 +40,8 @@ var Login = (function () {
     };
     ;
     Login.prototype.logout = function () {
-        localStorage.removeItem('token');
-        this.router.navigate(['login']);
+        this.appService.resetCredential();
+        this.router.navigate(['/login']);
     };
     Login.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
@@ -67,7 +65,7 @@ var CreateAccount = (function () {
     };
     ;
     CreateAccount.prototype.ngOnDestroy = function () {
-        //this.subscription.unsubscribe();
+        this.subscription.unsubscribe();
     };
     ;
     CreateAccount = __decorate([

@@ -63,9 +63,26 @@ router.post('/api/send/password', function (req, res, next) {
                 if (error) {
                     res.status(406).send(false);
                 } else {
-                    var random = crypto.randomBytes(4).toString('hex');
-                    var htmlBody = config.sendPasswordMailBody.replace('@pwd', random).replace('@url', config.host);
-                    handler.sendMail(res, next, decoded, null, htmlBody);
+
+                    //let random = crypto.randomBytes(4).toString('hex');
+                    let url = `<a href='${config.host}'>${config.host}</a>`;
+                    let htmlBody = config.sendPassword.mailBody.replace('@url', url);
+                    let emailItem = config.sendMail;
+                    emailItem.htmlBody = htmlBody;
+                    emailItem.subject = config.forgotPassword.subject;
+                    emailItem.to = decoded.data;                    
+                    //let email = decoded.data;
+                    var data = { action: 'newPassword', data: emailItem, };
+                    handler.edgePush(res, next, 'newPassword', data);
+                    
+                    // let random = crypto.randomBytes(4).toString('hex');
+                    // let url = `<a href='${config.host}'>${config.host}</a>`;
+                    // let htmlBody = config.sendPassword.mailBody.replace('@pwd', random).replace('@url', url);
+                    // let emailItem = config.sendMail;
+                    // emailItem.htmlBody = htmlBody;
+                    // emailItem.subject = config.forgotPassword.subject;
+                    // emailItem.to = decoded.data;
+                    // handler.sendMail(res, next, emailItem);
                 }
             });
         } else {
@@ -107,8 +124,7 @@ router.all('/api*', function (req, res, next) {
                     next(err);
                 }
                 else {
-                    user = decoded;
-                    req.user = user;
+                    req.user = decoded;
                     next();
                 }
             });
@@ -128,15 +144,13 @@ router.post('/api/change/password', function (req, res, next) {
     try {
         let auth = req.body.auth;
         if (auth) {
-            var data = { action: 'changePassword', auth: auth
-            ,sendMail:{
-                host:config.sendmail.host,
-                port:config.sendMail.port,
-                user:config.sendMail.user,
-                password:config.sendMail.password,
-                successBody:config.changePasswordSuccessMailBody,
-                subject:config.config.changePasswordMailSubject
-            }};
+            let emailItem = config.sendMail;
+            emailItem.htmlBody = config.changePassword.mailBody;
+            emailItem.subject = config.changePassword.subject;
+            var data = {
+                action: 'changePassword', auth: auth
+                , emailItem: emailItem
+            };
             handler.edgePush(res, next, 'changePassword', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
