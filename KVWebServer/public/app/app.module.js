@@ -14,7 +14,8 @@ var http_1 = require('@angular/http');
 var forms_1 = require('@angular/forms');
 var app_component_1 = require('./components/app.component');
 var login_component_1 = require('./components/login/login.component');
-var forgotPassword_component_1 = require('./components/forgotPassword/forgotPassword.component');
+var createAccount_component_1 = require('./components/createAccount/createAccount.component');
+var managePassword_component_1 = require('./components/managePassword/managePassword.component');
 var order_component_1 = require('./components/order/order.component');
 //import {ChildComponent} from './childComponent';
 var app_service_1 = require('./services/app.service');
@@ -28,8 +29,8 @@ var AppModule = (function () {
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, http_1.HttpModule, app_routes_1.Routing, forms_1.FormsModule],
-            declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, forgotPassword_component_1.ForgotPassword,
-                forgotPassword_component_1.SendPassword, forgotPassword_component_1.ChangePassword, login_component_1.CreateAccount],
+            declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, managePassword_component_1.ForgotPassword,
+                managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount],
             providers: [app_service_1.AppService, app_service_1.LoginGuard],
             bootstrap: [app_component_1.AppComponent]
         }), 

@@ -5,7 +5,7 @@ import { AppService } from '../../services/app.service';
 import { md5 } from '../../vendor/md5';
 
 @Component({
-  templateUrl: 'app/components/forgotPassword/forgotPassword.component.html'
+  templateUrl: 'app/components/managePassword/forgotPassword.component.html'
 })
 export class ForgotPassword {
   subscription: Subscription;
@@ -61,7 +61,7 @@ export class SendPassword {
 
 //change password component
 @Component({
-  templateUrl: 'app/components/forgotPassword/changePassword.component.html'
+  templateUrl: 'app/components/managePassword/changePassword.component.html'
 })
 export class ChangePassword {
   subscription: Subscription;

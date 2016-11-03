@@ -38,7 +38,7 @@ var ForgotPassword = (function () {
     };
     ForgotPassword = __decorate([
         core_1.Component({
-            templateUrl: 'app/components/forgotPassword/forgotPassword.component.html'
+            templateUrl: 'app/components/managePassword/forgotPassword.component.html'
         }), 
         __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
     ], ForgotPassword);
@@ -120,11 +120,11 @@ var ChangePassword = (function () {
     };
     ChangePassword = __decorate([
         core_1.Component({
-            templateUrl: 'app/components/forgotPassword/changePassword.component.html'
+            templateUrl: 'app/components/managePassword/changePassword.component.html'
         }), 
         __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
     ], ChangePassword);
     return ChangePassword;
 }());
 exports.ChangePassword = ChangePassword;
-//# sourceMappingURL=forgotPassword.component.js.map
+//# sourceMappingURL=managePassword.component.js.map

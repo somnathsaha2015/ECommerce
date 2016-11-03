@@ -12,7 +12,7 @@
 11. Client side validations
 12. Speed up RXjs
 		13. JWT duration 24 hours
-14. replace new HTML's
+		14. replace new HTML's
 
 //Authentication
 https://medium.com/@blacksonic86/angular-2-authentication-revisited-611bf7373bf9#.3c66v2lzc

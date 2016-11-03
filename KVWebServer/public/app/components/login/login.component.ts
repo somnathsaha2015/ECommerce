@@ -38,19 +38,3 @@ export class Login {
     this.subscription.unsubscribe();
   }
 }
-
-@Component({
-  templateUrl: 'app/components/login/createAccount.component.html'
-})
-export class CreateAccount {
-  email: string;
-  constructor(private appService: AppService, private router: Router) {
-  
-  };
-  createAccount(pwd, confirmPwd) {
-    
-  };
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  };
-}

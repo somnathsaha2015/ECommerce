@@ -18,7 +18,7 @@ export class AppComponent {
 
   constructor() {    
   };
-  buttonClicked(){
-    console.log("Button Clicked");
-  }
+  // buttonClicked(){
+  //   console.log("Button Clicked");
+  // }
 }

@@ -11,13 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var app_service_1 = require('../../services/app.service');
-var md5_1 = require('../../vendor/md5');
-var Login = (function () {
-    function Login(appService, router) {
-        var _this = this;
+var CreateAccount = (function () {
+    function CreateAccount(appService, router) {
         this.appService = appService;
         this.router = router;
-        this.subscription = appService.filterOn('post:authenticate')
+        this.subscription = appService.filterOn('post:create:account')
             .subscribe(function (d) {
             console.log(d);
             if (d.data.error) {
@@ -26,33 +24,24 @@ var Login = (function () {
             }
             else {
                 console.log(d.data.token);
-                _this.appService.setCredential(_this.email, d.data.token);
-                _this.router.navigate(['order']);
             }
         });
     }
     ;
-    Login.prototype.authenticate = function (pwd) {
-        var base64Encoded = this.appService.encodeBase64(this.email + ':' + md5_1.md5(pwd));
-        console.log('md5:' + md5_1.md5(pwd));
-        console.log(base64Encoded);
-        this.appService.httpPost('post:authenticate', { auth: base64Encoded });
+    CreateAccount.prototype.createAccount = function (pwd, confirmPwd) {
     };
     ;
-    Login.prototype.logout = function () {
-        this.appService.resetCredential();
-        this.router.navigate(['/login']);
-    };
-    Login.prototype.ngOnDestroy = function () {
+    CreateAccount.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
     };
-    Login = __decorate([
+    ;
+    CreateAccount = __decorate([
         core_1.Component({
-            templateUrl: 'app/components/login/login.component.html'
+            templateUrl: 'app/components/createAccount/createAccount.component.html'
         }), 
         __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
-    ], Login);
-    return Login;
+    ], CreateAccount);
+    return CreateAccount;
 }());
-exports.Login = Login;
-//# sourceMappingURL=login.component.js.map
+exports.CreateAccount = CreateAccount;
+//# sourceMappingURL=createAccount.component.js.map

@@ -1,7 +1,8 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
-import { Login,CreateAccount } from '../login/login.component';
-import {ForgotPassword, SendPassword, ChangePassword } from '../forgotPassword/forgotPassword.component';
+import { Login} from '../login/login.component';
+import {CreateAccount } from '../createAccount/createAccount.component';
+import {ForgotPassword, SendPassword, ChangePassword } from '../managePassword/managePassword.component';
 import { Order } from '../order/order.component';
 import {LoginGuard} from '../../services/app.service';
 
@@ -43,6 +44,4 @@ const routes: Routes = [
         pathMatch:'full'
     }    
 ];
-//var Routing = {};
-//export var Routing = {};
 export const Routing: ModuleWithProviders = RouterModule.forRoot(routes);

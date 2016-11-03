@@ -19,9 +19,6 @@ var AppComponent = (function () {
     function AppComponent() {
     }
     ;
-    AppComponent.prototype.buttonClicked = function () {
-        console.log("Button Clicked");
-    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
