@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using KVConnector.Properties;
 using TBSeed;
+using System.Collections;
 using System.Transactions;
 
 namespace KVConnector
@@ -32,6 +33,7 @@ namespace KVConnector
                 RoutingDictionary.Add("isEmailExist", IsEmailExistAsync);
                 RoutingDictionary.Add("changePassword", ChangePasswordAsync);
                 RoutingDictionary.Add("newPassword", NewPasswordAsync);
+                RoutingDictionary.Add("create:account", CreateAccountAsync);
             }
         }
         #endregion
@@ -362,5 +364,118 @@ namespace KVConnector
         }
         #endregion
 
+        #region CreateAccountAsync
+        public async Task<object> CreateAccountAsync(dynamic obj)
+        {
+            dynamic result = new ExpandoObject();
+            Task<object> t = Task.Run<object>(() =>
+            {
+                try
+                {
+                    IDictionary<string, object> objDictionary = (IDictionary<string, object>)obj;
+                    bool success = false;
+
+                    if (objDictionary.ContainsKey("account"))
+                    {
+                        dynamic account = (dynamic)objDictionary["account"];
+                        var email = account.email;
+                        var hash = account.hash;
+                        List<SqlParameter> paramsList = new List<SqlParameter>();
+                        paramsList.Add(new SqlParameter("email", email));
+                        var isExist = seedDataAccess.ExecuteScalar(SqlResource.IsEmailExist, paramsList);
+                        if (isExist == null)
+                        {
+                            dynamic user = new ExpandoObject();
+                            user.Email = email;
+                            user.PwdHash = hash;
+                            user.Role = "u";
+                            Dictionary<string, object> userDict = TBSeed.SeedUtil.GetDictFromDynamicObject(user);
+                            var seed = new Seed()
+                            {
+                                TableName="UserMaster",
+                                TableDict=userDict,                                
+                                IsCustomIDGenerated=false,
+                                PKeyColName="Id"
+                            };
+                            List<Seed> seeds = new List<Seed>();
+                            seeds.Add(seed);
+                            seedDataAccess.SaveSeeds(seeds);
+                            success = true;
+                        }
+                        else
+                        {
+                            Exception exception = new Exception();
+                            exception.Data.Add("403", Resources.ErrEmailAlreadyExists);
+                            throw exception;
+                        }                        
+                    }
+                    if (success)
+                    {
+                        result.status = 200;
+                        result.changedPwdHash = true;
+                    }
+                    else
+                    {
+                        Util.setError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = new ExpandoObject();
+                    if(ex.Data.Keys.Count > 0)
+                    {
+                        var entryList = ex.Data.Cast<DictionaryEntry>();
+                        int errorNo = int.Parse(entryList.ElementAt(0).Key.ToString());
+                        string errorMessage = entryList.ElementAt(0).Value.ToString();
+                        Util.setError(result, errorNo, errorMessage, errorMessage);
+                    }
+                    else
+                    {
+                        Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                    }                    
+                }
+                return (result);
+            });
+            result = await t;
+            return (result);
+        }
+        #endregion
+
+        #region EmptyMethodAsync
+        public async Task<object> EmptyMethodAsync(dynamic obj)
+        {
+            dynamic result = new ExpandoObject();
+            Task<object> t = Task.Run<object>(() =>
+            {
+                try
+                {
+                    IDictionary<string, object> objDictionary = (IDictionary<string, object>)obj;
+                    bool success = false;
+
+                    if (objDictionary.ContainsKey("data"))
+                    {
+                        dynamic emailObject = (dynamic)objDictionary["data"];
+                    }
+                    if (success)
+                    {
+                        result.status = 200;
+                        result.changedPwdHash = true;
+                    }
+                    else
+                    {
+                        Util.setError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = new ExpandoObject();
+                    Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                }
+                return (result);
+            });
+            result = await t;
+            return (result);
+        }
+        #endregion
     }
 }

@@ -136,6 +136,21 @@ filterOn('newPassword').subscribe(d => {
     next(err);
 });
 
+filterOn('create:account').subscribe(d => {
+    if (d.result) {
+        if (d.result.error) {
+            d.next(d.result.error);
+        } else {
+            d.res.status(200).json({ "create:account": true });
+        }
+    } else {
+        let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+        next(err);
+    }
+}, e => {
+    let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+    next(err);
+});
 
 //send mail
 function sendMail(res, next, emailItem) {

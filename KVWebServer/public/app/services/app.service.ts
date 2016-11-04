@@ -25,21 +25,7 @@ export class AppService {
     constructor(private http: Http) {
         this.subject = new Subject();
         this.channel = {};
-    };
-    // setEmail(email) {
-    //     this.globalHash[email] = email;
-    // }
-    // getEmail(): string {
-    //     let ret = this.globalHash['email'];
-    //     if (ret) {
-    //         return (ret);
-    //     } else {
-    //         return (null);
-    //     }
-    // }
-    // resetEmail() {
-    //     delete this.globalHash['email'];
-    // }
+    };    
     setCredential(email, token) {
         let credential = { email: email, token: token };
         localStorage.setItem('credential', JSON.stringify(credential));

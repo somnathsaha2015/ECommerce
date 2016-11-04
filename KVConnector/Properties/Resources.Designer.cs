@@ -70,6 +70,15 @@ namespace KVConnector.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email already exists.
+        /// </summary>
+        internal static string ErrEmailAlreadyExists {
+            get {
+                return ResourceManager.GetString("ErrEmailAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error in performing the operation.
         /// </summary>
         internal static string ErrGenericError {

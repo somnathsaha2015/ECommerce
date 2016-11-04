@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var app_service_1 = require('../../services/app.service');
+var md5_1 = require('../../vendor/md5');
 var CreateAccount = (function () {
     function CreateAccount(appService, router) {
         this.appService = appService;
@@ -23,12 +24,16 @@ var CreateAccount = (function () {
                 appService.resetCredential();
             }
             else {
-                console.log(d.data.token);
+                console.log('success');
             }
         });
     }
     ;
     CreateAccount.prototype.createAccount = function (pwd, confirmPwd) {
+        if (pwd === confirmPwd) {
+            var data = { email: this.email, hash: md5_1.md5(pwd) };
+            this.appService.httpPost('post:create:account', data);
+        }
     };
     ;
     CreateAccount.prototype.ngOnDestroy = function () {

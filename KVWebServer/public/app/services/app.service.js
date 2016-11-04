@@ -27,20 +27,6 @@ var AppService = (function () {
         this.channel = {};
     }
     ;
-    // setEmail(email) {
-    //     this.globalHash[email] = email;
-    // }
-    // getEmail(): string {
-    //     let ret = this.globalHash['email'];
-    //     if (ret) {
-    //         return (ret);
-    //     } else {
-    //         return (null);
-    //     }
-    // }
-    // resetEmail() {
-    //     delete this.globalHash['email'];
-    // }
     AppService.prototype.setCredential = function (email, token) {
         var credential = { email: email, token: token };
         localStorage.setItem('credential', JSON.stringify(credential));

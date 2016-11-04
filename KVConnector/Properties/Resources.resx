@@ -120,6 +120,9 @@
   <data name="ErrAuthenticationFailure" xml:space="preserve">
     <value>Authentication for the user failed</value>
   </data>
+  <data name="ErrEmailAlreadyExists" xml:space="preserve">
+    <value>Email already exists</value>
+  </data>
   <data name="ErrGenericError" xml:space="preserve">
     <value>Error in performing the operation</value>
   </data>

@@ -4,6 +4,7 @@ exports.urlHash = {
     'post:validate:token': '/api/validate/token',
     'post:forgot:password': '/api/forgot/password',
     'post:send:password': '/api/send/password',
-    'post:change:password': '/api/change/password'
+    'post:change:password': '/api/change/password',
+    'post:create:account': '/api/create/account'
 };
 //# sourceMappingURL=config.js.map

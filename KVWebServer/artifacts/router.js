@@ -70,11 +70,10 @@ router.post('/api/send/password', function (req, res, next) {
                     let emailItem = config.sendMail;
                     emailItem.htmlBody = htmlBody;
                     emailItem.subject = config.forgotPassword.subject;
-                    emailItem.to = decoded.data;                    
-                    //let email = decoded.data;
+                    emailItem.to = decoded.data;
                     var data = { action: 'newPassword', data: emailItem, };
                     handler.edgePush(res, next, 'newPassword', data);
-                    
+
                     // let random = crypto.randomBytes(4).toString('hex');
                     // let url = `<a href='${config.host}'>${config.host}</a>`;
                     // let htmlBody = config.sendPassword.mailBody.replace('@pwd', random).replace('@url', url);
@@ -103,6 +102,21 @@ router.post('/api/forgot/password', function (req, res, next) {
             var data = { action: 'isEmailExist', email: email };
             //verify email if it exists and then send url to the verified mail
             handler.edgePush(res, next, 'forgotPassowrd', data);
+        } else {
+            let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
+            next(err);
+        }
+    } catch (err) {
+        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+        next(err);
+    }
+});
+router.post('/api/create/account', function (req, res, next) {
+    try {
+        let account = req.body;
+        if (account) {
+            let data = { action: 'create:account', account: account };
+            handler.edgePush(res, next, 'create:account', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
