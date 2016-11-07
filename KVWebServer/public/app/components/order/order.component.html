@@ -1,4 +1,23 @@
 <div class="jumbotron container">
 	<h2>Order</h2>
-	<a routerLink='/change/password'>Change password</a>    
+	<a routerLink='/change/password'>Change password</a>
+	<div>Intro text</div>
+	<label>{{staticTexts.introText}}</label>
+	<table>
+		<tr *ngFor="let order of orders">
+			<td style="width:25%">{{order.Item }}</td>
+			<td><a href='#'>Review</a></td>
+			<td>${{order.Price}}/{{order.Packing =='b' ? 'Btl' : 'Pkg'}}</td>
+			<td>Avail: {{order.AvailableQty}} {{order.Packing =='b' ? 'Btls' : 'Pkg'}}</td>
+			<td><span>Request</span><input type="text" [(ngModel)]="order.OrderQty"> </td>
+			<td><span>Wish List</span><input type="text" [(ngModel)]="order.WishList"></td>
+		</tr>
+	</table>
+	<button (click)="request()">Request</button>
+	<div class="checkbox">
+		<label><input type="checkbox" value="">{{staticTexts.holidayGift}}</label>
+	</div>
+	<label>{{staticTexts.minimumRequest}}</label>
+	<div><label>{{staticTexts.bottomNotes}}</label></div>
+	
 </div>

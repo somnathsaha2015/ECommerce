@@ -9,9 +9,10 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 @Component({
   selector: 'my-app',
-  template:`
-  <router-outlet></router-outlet>
-  `
+  templateUrl:'app/components/app.component.html'
+  // template:`
+  // <router-outlet></router-outlet>
+  // `
 })
 
 export class AppComponent {

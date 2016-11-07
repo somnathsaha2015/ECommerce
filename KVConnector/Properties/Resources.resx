@@ -129,16 +129,25 @@
   <data name="ErrInitFailed" xml:space="preserve">
     <value>Initialization failed</value>
   </data>
+  <data name="ErrInputDataWrong" xml:space="preserve">
+    <value>Input data is not in correct format</value>
+  </data>
   <data name="ErrInternalServerError" xml:space="preserve">
     <value>Internal server error</value>
   </data>
   <data name="ErrResourceNotFound" xml:space="preserve">
     <value>Resource not found</value>
   </data>
+  <data name="ErrSqlQueryFailed" xml:space="preserve">
+    <value>Execution of sql query at server failed</value>
+  </data>
   <data name="MessAuthenticationFailed" xml:space="preserve">
     <value>Either user name or password is incorrect</value>
   </data>
   <data name="MessGenericError" xml:space="preserve">
     <value>Operation could not be performed. There was some error</value>
+  </data>
+  <data name="MessSqlQueryFailed" xml:space="preserve">
+    <value>Sql query could not be executed in data access lawyer. There may be some error in sql query itself or sqlKey is wrongly defined. This is server side error so Administrator needs to be contacted.</value>
   </data>
 </root>

@@ -120,11 +120,20 @@
   <data name="ChangePasswordHash" xml:space="preserve">
     <value>update UserMaster set PwdHash = @newPwdHash where email = @email and PwdHash = @oldPwdHash</value>
   </data>
+  <data name="GetCurrentOffer" xml:space="preserve">
+    <value>select Id, Item, Price, Packing, AvailableQty from OfferMaster;</value>
+  </data>
   <data name="GetHashAndRole" xml:space="preserve">
     <value>select Role,PwdHash from UserMaster where Email = @email;</value>
   </data>
+  <data name="GetMaxOrderNumber" xml:space="preserve">
+    <value>select max(IntValue) from Setup where MKey = 'MaxOrderNumber'</value>
+  </data>
   <data name="GetPwdHash" xml:space="preserve">
     <value>select PwdHash from UserMaster where email = @email;</value>
+  </data>
+  <data name="GetUserIdFromEmail" xml:space="preserve">
+    <value>select MAX(Id) from UserMaster where Email = @email;</value>
   </data>
   <data name="IsEmailAndHashExist" xml:space="preserve">
     <value>select 0 from UserMaster where Email = @email and PwdHash = @oldPwdHash;</value>
@@ -134,5 +143,8 @@
   </data>
   <data name="NewPasswordHash" xml:space="preserve">
     <value>update UserMaster set PwdHash = @newPwdHash where email = @email;</value>
+  </data>
+  <data name="SetMaxOrderNumber" xml:space="preserve">
+    <value>update Setup set IntValue = @value where MKey = 'MaxOrderNumber'</value>
   </data>
 </root>

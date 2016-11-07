@@ -26,11 +26,11 @@ router.post('/api/validate/token', function (req, res, next) {
                 res.status(200).send(ret);
             });
         } else {
-            err = new def.NError(400, messages.errTokenNotFound, messages.messTokenNotFound);
+            let err = new def.NError(400, messages.errTokenNotFound, messages.messTokenNotFound);
             next(err);
         }
-    } catch (err) {
-        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
 });
@@ -45,11 +45,11 @@ router.post('/api/authenticate', function (req, res, next) {
             handler.edgePush(res, next, 'authenticate', data);
         }
         else {
-            err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
+            let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
         }
-    } catch (err) {
-        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
 });
@@ -71,8 +71,8 @@ router.post('/api/send/password', function (req, res, next) {
                     emailItem.htmlBody = htmlBody;
                     emailItem.subject = config.forgotPassword.subject;
                     emailItem.to = decoded.data;
-                    var data = { action: 'newPassword', data: emailItem, };
-                    handler.edgePush(res, next, 'newPassword', data);
+                    var data = { action: 'new:password', data: emailItem, };
+                    handler.edgePush(res, next, 'new:password', data);
 
                     // let random = crypto.randomBytes(4).toString('hex');
                     // let url = `<a href='${config.host}'>${config.host}</a>`;
@@ -87,8 +87,8 @@ router.post('/api/send/password', function (req, res, next) {
         } else {
             res.status(404).send(false);
         }
-    } catch (err) {
-        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
 });
@@ -101,13 +101,13 @@ router.post('/api/forgot/password', function (req, res, next) {
             let email = Buffer.from(auth, 'base64').toString();
             var data = { action: 'isEmailExist', email: email };
             //verify email if it exists and then send url to the verified mail
-            handler.edgePush(res, next, 'forgotPassowrd', data);
+            handler.edgePush(res, next, 'forgot:passowrd', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
         }
-    } catch (err) {
-        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
 });
@@ -121,8 +121,8 @@ router.post('/api/create/account', function (req, res, next) {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
         }
-    } catch (err) {
-        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
 });
@@ -144,11 +144,11 @@ router.all('/api*', function (req, res, next) {
             });
         }
         else {
-            err = new def.NError(400, messages.errTokenNotFound, messages.messTokenNotFound);
+            let err = new def.NError(400, messages.errTokenNotFound, messages.messTokenNotFound);
             next(err);
         }
-    } catch (err) {
-        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
 });
@@ -162,23 +162,45 @@ router.post('/api/change/password', function (req, res, next) {
             emailItem.htmlBody = config.changePassword.mailBody;
             emailItem.subject = config.changePassword.subject;
             var data = {
-                action: 'changePassword', auth: auth
+                action: 'change:password', auth: auth
                 , emailItem: emailItem
             };
-            handler.edgePush(res, next, 'changePassword', data);
+            handler.edgePush(res, next, 'change:password', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
         }
-    } catch (err) {
-        let err = new def.NError(500, messages.errInternalServerError, messages.errInternalServerError);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
 });
-router.get('/api/order', function (req, res) {
+router.get('/api/current/offer', function (req, res, next) {
+    try {
+        let data = { action: 'sql:query', sqlKey: 'getCurrentOffer', sqlParms: {} };
+        handler.edgePush(res, next, 'current:offer', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+
+router.post('/api/order', function (req, res,next) {
+    try {
+        let data = { action: 'save:order', order: req.body.order, email: req.user.email };
+        handler.edgePush(res, next, 'save:order', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+
+router.get('/api/order', function (req, res,next) {
     console.log('send order');
     res.json({ date: 'This is order' });
 });
+
+
 // apiRouter.post('/sale', function (req, res, next) {
 //     var user = req.user;
 //     var data = { "action": "addSales", authorize: { apiApplicationName: 'sale', httpMethod: req.method, user: user }, innerData: { sale: req.body } };

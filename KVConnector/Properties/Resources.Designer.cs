@@ -97,6 +97,15 @@ namespace KVConnector.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Input data is not in correct format.
+        /// </summary>
+        internal static string ErrInputDataWrong {
+            get {
+                return ResourceManager.GetString("ErrInputDataWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Internal server error.
         /// </summary>
         internal static string ErrInternalServerError {
@@ -115,6 +124,15 @@ namespace KVConnector.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Execution of sql query at server failed.
+        /// </summary>
+        internal static string ErrSqlQueryFailed {
+            get {
+                return ResourceManager.GetString("ErrSqlQueryFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Either user name or password is incorrect.
         /// </summary>
         internal static string MessAuthenticationFailed {
@@ -129,6 +147,15 @@ namespace KVConnector.Properties {
         internal static string MessGenericError {
             get {
                 return ResourceManager.GetString("MessGenericError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sql query could not be executed in data access lawyer. There may be some error in sql query itself or sqlKey is wrongly defined. This is server side error so Administrator needs to be contacted..
+        /// </summary>
+        internal static string MessSqlQueryFailed {
+            get {
+                return ResourceManager.GetString("MessSqlQueryFailed", resourceCulture);
             }
         }
     }

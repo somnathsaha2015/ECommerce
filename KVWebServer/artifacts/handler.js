@@ -5,7 +5,6 @@ var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 let subject = new rx.Subject();
 let messages, def, config;
-//let err = {};
 console.log('Started edge');
 
 var marshal = edge.func({
@@ -38,7 +37,7 @@ function edgePush(res, next, id, data) {
             //subject.next({ res: res, id: id, data: error, next: next });
             next(error);
         } else {
-            subject.next({ res: res, id: id, result: result, next: next });
+            subject.next({ res: res,next: next, id: id, result: result });
         }
     });
 };
@@ -74,12 +73,9 @@ filterOn('authenticate').subscribe(d => {
         let err = new def.NError(401, messages.errUnAuthenticated, messages.messAuthFailed);
         next(err);
     }
-}, (e) => {
-    let err = new def.NError(520, messages.errUnAuthenticated, messages.messAuthFailed);
-    next(err);
 });
 
-filterOn('forgotPassowrd').subscribe(d => {
+filterOn('forgot:passowrd').subscribe(d => {
     if (d.result) {
         if (d.result.error) {
             d.next(d.result.error);
@@ -99,41 +95,45 @@ filterOn('forgotPassowrd').subscribe(d => {
         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
         next(err);
     }
-}, e => {
-    let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
-    next(err);
 });
 
-filterOn('changePassword').subscribe(d => {
+filterOn('current:offer').subscribe(d => {
     if (d.result) {
         if (d.result.error) {
             d.next(d.result.error);
         } else {
-            d.res.status(200).json({ "changedPassword": true });
+            d.res.status(200).json(d.result);
         }
     } else {
         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
         next(err);
     }
-}, e => {
-    let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
-    next(err);
 });
 
-filterOn('newPassword').subscribe(d => {
+filterOn('change:password').subscribe(d => {
     if (d.result) {
         if (d.result.error) {
             d.next(d.result.error);
         } else {
-            d.res.status(200).json({ "newPassword": true });
+            d.res.status(200).json({ "change:password": true });
         }
     } else {
         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
         next(err);
     }
-}, e => {
-    let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
-    next(err);
+});
+
+filterOn('new:password').subscribe(d => {
+    if (d.result) {
+        if (d.result.error) {
+            d.next(d.result.error);
+        } else {
+            d.res.status(200).json({ "new:password": true });
+        }
+    } else {
+        let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+        next(err);
+    }
 });
 
 filterOn('create:account').subscribe(d => {
@@ -147,9 +147,19 @@ filterOn('create:account').subscribe(d => {
         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
         next(err);
     }
-}, e => {
-    let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
-    next(err);
+});
+
+filterOn('save:order').subscribe(d => {
+    if (d.result) {
+        if (d.result.error) {
+            d.next(d.result.error);
+        } else {
+            d.res.status(200).json({'save:order':true});
+        }
+    } else {
+        let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+        d.next(err);
+    }
 });
 
 //send mail
@@ -168,7 +178,6 @@ function sendMail(res, next, emailItem) {
         }
         var transporter = nodemailer.createTransport(options);
         var mailOptions = {
-            from1: '"Capital ch2 👥" <capitalch2@gmail.com>', // sender address
             from: `${emailItem.fromUserName}👥 <${emailItem.fromUser}>`,
             to: emailItem.to, // list of receivers
             subject: emailItem.subject // Subject line

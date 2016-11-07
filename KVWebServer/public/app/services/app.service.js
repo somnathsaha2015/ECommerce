@@ -21,12 +21,14 @@ var config_1 = require('../config');
 var AppService = (function () {
     function AppService(http) {
         this.http = http;
-        //token: string;
         this.globalHash = {};
         this.subject = new Subject_1.Subject();
         this.channel = {};
     }
     ;
+    AppService.prototype.getMessage = function (messageKey) {
+        return (config_1.messages[messageKey]);
+    };
     AppService.prototype.setCredential = function (email, token) {
         var credential = { email: email, token: token };
         localStorage.setItem('credential', JSON.stringify(credential));
@@ -41,13 +43,45 @@ var AppService = (function () {
         return (credential);
     };
     ;
+    AppService.prototype.getToken = function () {
+        var token = null;
+        var credential = this.getCredential();
+        if (credential) {
+            token = credential.token;
+        }
+        return (token);
+    };
     AppService.prototype.resetCredential = function () {
         localStorage.removeItem('credential');
     };
+    ;
     AppService.prototype.httpPost = function (id, body) {
         var _this = this;
         var url = config_1.urlHash[id];
         this.http.post(url, body)
+            .map(function (response) { return response.json(); })
+            .subscribe(function (d) {
+            return _this.subject.next({
+                id: id, data: d
+            });
+        }, function (err) {
+            return _this.subject.next({
+                id: id,
+                data: { error: err }
+            });
+        });
+    };
+    ;
+    AppService.prototype.httpGet = function (id, body) {
+        var _this = this;
+        var url = config_1.urlHash[id];
+        var requestOptionsArgs = {
+            body: body
+        };
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('x-access-token', this.getToken());
+        this.http.get(url, { headers: headers })
             .map(function (response) { return response.json(); })
             .subscribe(function (d) {
             return _this.subject.next({

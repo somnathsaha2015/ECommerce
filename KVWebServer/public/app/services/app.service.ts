@@ -1,4 +1,4 @@
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Http, Response, Headers, RequestOptionsArgs } from '@angular/http';
 import { Injectable } from '@angular/core';
 //import { CanActivate } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
@@ -14,18 +14,20 @@ import {
 import 'rxjs/add/operator/map'; //this is how operator is imported
 import 'rxjs/add/operator/filter';
 //import * as _ from 'lodash';
-import { urlHash } from '../config';
+import { urlHash, messages } from '../config';
 
 @Injectable()
 export class AppService {
     subject: Subject<any>;
-    channel: any;
-    //token: string;
+    channel: any;    
     globalHash: {} = {};
     constructor(private http: Http) {
         this.subject = new Subject();
         this.channel = {};
-    };    
+    };
+    getMessage(messageKey){
+        return(messages[messageKey]);
+    }
     setCredential(email, token) {
         let credential = { email: email, token: token };
         localStorage.setItem('credential', JSON.stringify(credential));
@@ -38,9 +40,17 @@ export class AppService {
         }
         return (credential);
     };
+    getToken(): string{
+        let token = null;
+        let credential = this.getCredential();
+        if(credential){
+            token = credential.token;
+        }
+        return (token);
+    }
     resetCredential() {
         localStorage.removeItem('credential');
-    }
+    };
     httpPost(id: string, body?: {}) {
         let url = urlHash[id];
         this.http.post(url, body)
@@ -54,7 +64,26 @@ export class AppService {
                     data: { error: err }
                 }));
     };
-
+    httpGet(id: string,body?:{}) {
+        let url = urlHash[id];
+        let requestOptionsArgs: RequestOptionsArgs = {
+            body: body
+        };
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('x-access-token', this.getToken());
+        this.http.get(url,{headers:headers})
+            .map(response => response.json())
+            .subscribe(d =>
+                this.subject.next({
+                    id: id, data: d
+                }), err =>
+                this.subject.next({
+                    id: id,
+                    data: { error: err }
+                }));
+    };
+    
     filterOn(id: string): Observable<any> {
         return (this.subject.filter(d => (d.id === id)));
     }

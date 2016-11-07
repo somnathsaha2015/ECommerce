@@ -70,6 +70,15 @@ namespace KVConnector.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to select Id, Item, Price, Packing, AvailableQty from OfferMaster;.
+        /// </summary>
+        internal static string GetCurrentOffer {
+            get {
+                return ResourceManager.GetString("GetCurrentOffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select Role,PwdHash from UserMaster where Email = @email;.
         /// </summary>
         internal static string GetHashAndRole {
@@ -79,11 +88,29 @@ namespace KVConnector.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to select max(IntValue) from Setup where MKey = &apos;MaxOrderNumber&apos;.
+        /// </summary>
+        internal static string GetMaxOrderNumber {
+            get {
+                return ResourceManager.GetString("GetMaxOrderNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select PwdHash from UserMaster where email = @email;.
         /// </summary>
         internal static string GetPwdHash {
             get {
                 return ResourceManager.GetString("GetPwdHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select MAX(Id) from UserMaster where Email = @email;.
+        /// </summary>
+        internal static string GetUserIdFromEmail {
+            get {
+                return ResourceManager.GetString("GetUserIdFromEmail", resourceCulture);
             }
         }
         
@@ -111,6 +138,15 @@ namespace KVConnector.Properties {
         internal static string NewPasswordHash {
             get {
                 return ResourceManager.GetString("NewPasswordHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to update Setup set IntValue = @value where MKey = &apos;MaxOrderNumber&apos;.
+        /// </summary>
+        internal static string SetMaxOrderNumber {
+            get {
+                return ResourceManager.GetString("SetMaxOrderNumber", resourceCulture);
             }
         }
     }

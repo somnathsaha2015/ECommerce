@@ -31,9 +31,11 @@ namespace KVConnector
                 RoutingDictionary.Add("init", InitAsync);
                 RoutingDictionary.Add("authenticate", AuthenticateAsync);
                 RoutingDictionary.Add("isEmailExist", IsEmailExistAsync);
-                RoutingDictionary.Add("changePassword", ChangePasswordAsync);
-                RoutingDictionary.Add("newPassword", NewPasswordAsync);
+                RoutingDictionary.Add("change:password", ChangePasswordAsync);
+                RoutingDictionary.Add("new:password", NewPasswordAsync);
                 RoutingDictionary.Add("create:account", CreateAccountAsync);
+                RoutingDictionary.Add("sql:query", ExecuteSqlQueryAsync);
+                RoutingDictionary.Add("save:order", SaveOrderAsync);
             }
         }
         #endregion
@@ -67,7 +69,7 @@ namespace KVConnector
                 }
                 catch (Exception ex)
                 {
-                    Util.setError(result, 403, Resources.ErrInitFailed, ex.Message);
+                    Util.SetError(result, 403, Resources.ErrInitFailed, ex.Message);
                 }
                 return (result);
             });
@@ -126,13 +128,13 @@ namespace KVConnector
                     if (!success)
                     {
                         result.authenticated = false;
-                        Util.setError(result, 401, Resources.ErrAuthenticationFailure, Resources.MessAuthenticationFailed);
+                        Util.SetError(result, 401, Resources.ErrAuthenticationFailure, Resources.MessAuthenticationFailed);
                     }
                 }
                 catch (Exception ex)
                 {
                     result = new ExpandoObject();
-                    Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                    Util.SetError(result, 500, Resources.ErrInternalServerError, ex.Message);
                 }
                 return (result);
             });
@@ -171,13 +173,13 @@ namespace KVConnector
                     }
                     else
                     {
-                        Util.setError(result, 404, Resources.ErrResourceNotFound, Resources.ErrResourceNotFound);
+                        Util.SetError(result, 404, Resources.ErrResourceNotFound, Resources.ErrResourceNotFound);
                     }
                 }
                 catch (Exception ex)
                 {
                     result = new ExpandoObject();
-                    Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                    Util.SetError(result, 500, Resources.ErrInternalServerError, ex.Message);
                 }
                 return (result);
             });
@@ -250,6 +252,7 @@ namespace KVConnector
                                                 paramsList.Add(new SqlParameter("email", email));
                                                 paramsList.Add(new SqlParameter("newPwdHash", oldPwdHash));
                                                 ret = seedDataAccess.ExecuteNonQuery(SqlResource.NewPasswordHash, paramsList);
+                                                throw ex;
                                             }
                                         }
                                     }
@@ -264,13 +267,13 @@ namespace KVConnector
                     }
                     else
                     {
-                        Util.setError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
+                        Util.SetError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
                     }
                 }
                 catch (Exception ex)
                 {
                     result = new ExpandoObject();
-                    Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                    Util.SetError(result, 500, Resources.ErrInternalServerError, ex.Message);
                 }
                 return (result);
             });
@@ -292,7 +295,7 @@ namespace KVConnector
                     bool success = false;
 
                     string alph = Guid.NewGuid().ToString().Substring(0, 8);
-                    string hash = Util.getMd5Hash(alph);
+                    string hash = Util.GetMd5Hash(alph);
                     if (objDictionary.ContainsKey("data"))
                     {
                         dynamic emailObject = (dynamic)objDictionary["data"];
@@ -349,13 +352,13 @@ namespace KVConnector
                     }
                     else
                     {
-                        Util.setError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
+                        Util.SetError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
                     }
                 }
                 catch (Exception ex)
                 {
                     result = new ExpandoObject();
-                    Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                    Util.SetError(result, 500, Resources.ErrInternalServerError, ex.Message);
                 }
                 return (result);
             });
@@ -392,10 +395,10 @@ namespace KVConnector
                             Dictionary<string, object> userDict = TBSeed.SeedUtil.GetDictFromDynamicObject(user);
                             var seed = new Seed()
                             {
-                                TableName="UserMaster",
-                                TableDict=userDict,                                
-                                IsCustomIDGenerated=false,
-                                PKeyColName="Id"
+                                TableName = "UserMaster",
+                                TableDict = userDict,
+                                IsCustomIDGenerated = false,
+                                PKeyColName = "Id"
                             };
                             List<Seed> seeds = new List<Seed>();
                             seeds.Add(seed);
@@ -407,7 +410,7 @@ namespace KVConnector
                             Exception exception = new Exception();
                             exception.Data.Add("403", Resources.ErrEmailAlreadyExists);
                             throw exception;
-                        }                        
+                        }
                     }
                     if (success)
                     {
@@ -416,23 +419,104 @@ namespace KVConnector
                     }
                     else
                     {
-                        Util.setError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
+                        Util.SetError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
                     }
                 }
                 catch (Exception ex)
                 {
                     result = new ExpandoObject();
-                    if(ex.Data.Keys.Count > 0)
+                    if (ex.Data.Keys.Count > 0)
                     {
                         var entryList = ex.Data.Cast<DictionaryEntry>();
                         int errorNo = int.Parse(entryList.ElementAt(0).Key.ToString());
                         string errorMessage = entryList.ElementAt(0).Value.ToString();
-                        Util.setError(result, errorNo, errorMessage, errorMessage);
+                        Util.SetError(result, errorNo, errorMessage, errorMessage);
                     }
                     else
                     {
-                        Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
-                    }                    
+                        Util.SetError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                    }
+                }
+                return (result);
+            });
+            result = await t;
+            return (result);
+        }
+        #endregion
+
+        #region ExecuteSqlQueryAsync
+        private async Task<object> ExecuteSqlQueryAsync(dynamic obj)
+        {
+            dynamic results = new ExpandoObject();
+            Task<object> t = Task.Run<object>(() =>
+            {
+                try
+                {
+                    IDictionary<string, object> objDictionary = (IDictionary<string, object>)obj;
+                    string sqlKey = objDictionary["sqlKey"].ToString();
+                    IDictionary<string, object> parmsDict = (IDictionary<string, object>)objDictionary["sqlParms"];
+                    List<SqlParameter> paramsList = new List<SqlParameter>();
+                    parmsDict.ToList<KeyValuePair<string, object>>().ForEach(x =>
+                    {
+                        paramsList.Add(new SqlParameter(x.Key, x.Value));
+                    });
+                    string sql = SqlResource.GetCurrentOffer;
+                    DataSet ds = new DataSet();
+                    ds = seedDataAccess.ExecuteDataSet(sql, paramsList);
+                    results = JsonConvert.SerializeObject(ds);
+                    ds.Dispose();
+                    //success = true;
+                    //if (success)
+                    //{
+                    //    results.status = 200;
+                    //    results.sqlQuery = true;
+                    //}
+                    //else
+                    //{
+                    //    Util.SetError(results, 405, Resources.ErrSqlQueryFailed, Resources.MessSqlQueryFailed);
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    Util.SetError(results, 500, Resources.ErrInternalServerError, ex.Message);
+                }
+                return (results);
+            });
+            results = await t;
+            return (results);
+        }
+        #endregion
+
+        #region SaveOrderAsync
+        public async Task<object> SaveOrderAsync(dynamic obj)
+        {
+
+            dynamic result = new ExpandoObject();
+            Task<object> t = Task.Run<object>(() =>
+            {
+                try
+                {
+                    IDictionary<string, object> objDictionary = (IDictionary<string, object>)obj;                    
+
+                    if (objDictionary.ContainsKey("order") && (objDictionary.ContainsKey("email")))
+                    {
+                        string email = objDictionary["email"].ToString();
+                        dynamic order = objDictionary["order"];
+                        List<Seed> saveOrderSeedList = Util.GetSaveOrderSeedList(seedDataAccess, email, order);
+                        seedDataAccess.SaveSeeds(saveOrderSeedList);
+                        result.status = 200;
+                        result.saveOrder = true;
+                    }
+                    else
+                    {
+                        Util.SetError(result, 406, Resources.ErrInputDataWrong, Resources.ErrInputDataWrong);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = new ExpandoObject();
+                    Util.SetError(result, 500, Resources.ErrInternalServerError, ex.Message);
+
                 }
                 return (result);
             });
@@ -463,13 +547,13 @@ namespace KVConnector
                     }
                     else
                     {
-                        Util.setError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
+                        Util.SetError(result, 405, Resources.ErrGenericError, Resources.MessGenericError);
                     }
                 }
                 catch (Exception ex)
                 {
                     result = new ExpandoObject();
-                    Util.setError(result, 500, Resources.ErrInternalServerError, ex.Message);
+                    Util.SetError(result, 500, Resources.ErrInternalServerError, ex.Message);
                 }
                 return (result);
             });
