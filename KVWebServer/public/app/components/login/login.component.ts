@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/subscription';
 import { AppService } from '../../services/app.service';
+import {viewBoxConfig} from '../../config';
 import { md5 } from '../../vendor/md5';
 
 @Component({

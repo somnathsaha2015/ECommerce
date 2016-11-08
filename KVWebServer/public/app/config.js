@@ -15,4 +15,18 @@ exports.messages = {
     'mess:order:minimum:request': 'Minimum request 6 bottles',
     'mess:order:bottom:notes': 'Wines in 6 bottle packages are subject to change'
 };
+exports.viewBoxConfig = {
+    '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
+    '/order': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false },
+    '/approve': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false },
+    '/receipt': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false },
+    '/profile': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
+    '/order/history': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
+    '/shipping/address': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
+    '/payment/method': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
+    '/change/password': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
+    '/create/account': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
+    '/forgot/password': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
+    '/send/password': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false }
+};
 //# sourceMappingURL=config.js.map
