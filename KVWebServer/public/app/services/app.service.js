@@ -95,6 +95,12 @@ var AppService = (function () {
         });
     };
     ;
+    //application wide events
+    AppService.prototype.emit = function (id, options) {
+        this.subject.next({
+            id: id, data: options
+        });
+    };
     AppService.prototype.filterOn = function (id) {
         return (this.subject.filter(function (d) { return (d.id === id); }));
     };

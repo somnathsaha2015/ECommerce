@@ -4,6 +4,12 @@ import { Login} from '../login/login.component';
 import {CreateAccount } from '../createAccount/createAccount.component';
 import {ForgotPassword, SendPassword, ChangePassword } from '../managePassword/managePassword.component';
 import { Order } from '../order/order.component';
+import { Profile } from '../profile/profile.component';
+import { Approve } from '../approve/approve.component';
+import { Receipt } from '../receipt/receipt.component';
+import { OrderHistory } from '../orderHistory/orderHistory.component';
+import { ShippingAddress } from '../shippingAddress/shippingAddress.component';
+import { PaymentMethod } from '../PaymentMethod/PaymentMethod.component';
 import {LoginGuard} from '../../services/app.service';
 
 const routes: Routes = [
@@ -37,6 +43,36 @@ const routes: Routes = [
     {
         path:'create/account',
         component:CreateAccount
+    },
+    {
+        path:'profile',
+        component: Profile
+        ,canActivate:[LoginGuard]
+    },
+    {
+        path:'approve',
+        component: Approve
+        ,canActivate:[LoginGuard]
+    },
+    {
+        path:'receipt',
+        component: Receipt
+        ,canActivate:[LoginGuard]
+    },
+     {
+        path:'order/history',
+        component: OrderHistory
+        ,canActivate:[LoginGuard]
+    },
+    {
+        path:'shipping/address',
+        component: ShippingAddress
+        ,canActivate:[LoginGuard]
+     },
+    {
+        path:'payment/method',
+        component: PaymentMethod
+        ,canActivate:[LoginGuard]
     },
     {
         path:'**',

@@ -10,22 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var app_service_1 = require('../../services/app.service');
-var Approve = (function () {
-    function Approve(appService) {
+var Profile = (function () {
+    function Profile(appService) {
         this.appService = appService;
     }
     ;
-    Approve.prototype.ngOnDestroy = function () {
+    Profile.prototype.ngOnDestroy = function () {
         //this.subscription.unsubscribe();
     };
     ;
-    Approve = __decorate([
+    Profile = __decorate([
         core_1.Component({
-            templateUrl: 'app/components/approve/approve.component.html'
+            templateUrl: 'app/components/profile/profile.component.html'
         }), 
         __metadata('design:paramtypes', [app_service_1.AppService])
-    ], Approve);
-    return Approve;
+    ], Profile);
+    return Profile;
 }());
-exports.Approve = Approve;
-//# sourceMappingURL=approve.component.js.map
+exports.Profile = Profile;
+//# sourceMappingURL=profile.component.js.map

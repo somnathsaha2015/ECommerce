@@ -110,12 +110,12 @@ filterOn('current:offer').subscribe(d => {
     }
 });
 
-filterOn('change:password').subscribe(d => {
+filterOn('common:result').subscribe(d => {
     if (d.result) {
         if (d.result.error) {
             d.next(d.result.error);
         } else {
-            d.res.status(200).json({ "change:password": true });
+            d.res.status(200).json({ success: true });
         }
     } else {
         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
@@ -123,44 +123,44 @@ filterOn('change:password').subscribe(d => {
     }
 });
 
-filterOn('new:password').subscribe(d => {
-    if (d.result) {
-        if (d.result.error) {
-            d.next(d.result.error);
-        } else {
-            d.res.status(200).json({ "new:password": true });
-        }
-    } else {
-        let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
-        next(err);
-    }
-});
+// filterOn('new:password').subscribe(d => {
+//     if (d.result) {
+//         if (d.result.error) {
+//             d.next(d.result.error);
+//         } else {
+//             d.res.status(200).json({ "new:password": true });
+//         }
+//     } else {
+//         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+//         next(err);
+//     }
+// });
 
-filterOn('create:account').subscribe(d => {
-    if (d.result) {
-        if (d.result.error) {
-            d.next(d.result.error);
-        } else {
-            d.res.status(200).json({ "create:account": true });
-        }
-    } else {
-        let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
-        next(err);
-    }
-});
+// filterOn('create:account').subscribe(d => {
+//     if (d.result) {
+//         if (d.result.error) {
+//             d.next(d.result.error);
+//         } else {
+//             d.res.status(200).json({ "create:account": true });
+//         }
+//     } else {
+//         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+//         next(err);
+//     }
+// });
 
-filterOn('save:order').subscribe(d => {
-    if (d.result) {
-        if (d.result.error) {
-            d.next(d.result.error);
-        } else {
-            d.res.status(200).json({'save:order':true});
-        }
-    } else {
-        let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
-        d.next(err);
-    }
-});
+// filterOn('save:order').subscribe(d => {
+//     if (d.result) {
+//         if (d.result.error) {
+//             d.next(d.result.error);
+//         } else {
+//             d.res.status(200).json({'save:order':true});
+//         }
+//     } else {
+//         let err = new def.NError(520, messages.errUnknown, messages.messErrorUnknown);
+//         d.next(err);
+//     }
+// });
 
 //send mail
 function sendMail(res, next, emailItem) {

@@ -1,2 +1,22 @@
-<h3>Landing page</h3>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li *ngIf="viewBox.needHelp"><a href="#">Need Help?</a></li>
+      <li *ngIf="viewBox.order"><a href="/order">Order</a></li>
+      <li *ngIf="viewBox.myAccount"><a href="/profile">My Account</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="container-fluid" *ngIf="viewBox.menuBar">
+  <ul class="nav nav-pills nav-justified">
+    <li class="active"><a href="/profile">Profile</a></li>
+    <li class="active"><a href="/order/history">Order History</a></li>
+    <li class="active"><a href="/shipping/address">Shipping Addresses</a></li>
+    <li class="active"><a href="/payment/method">Payment Methods</a></li>
+    <li class="active"><a href="/change/password">Change Password</a></li>
+  </ul>
+</div>
 <router-outlet></router-outlet>
