@@ -21,6 +21,12 @@ var order_component_1 = require('./components/order/order.component');
 var app_service_1 = require('./services/app.service');
 //import { LoginGuard } from './services/app.loginGuard';
 var app_routes_1 = require('./components/routes/app.routes');
+var profile_component_1 = require('./components/profile/profile.component');
+var approve_component_1 = require('./components/approve/approve.component');
+var receipt_component_1 = require('./components/receipt/receipt.component');
+var orderHistory_component_1 = require('./components/orderHistory/orderHistory.component');
+var shippingAddress_component_1 = require('./components/shippingAddress/shippingAddress.component');
+var PaymentMethod_component_1 = require('./components/PaymentMethod/PaymentMethod.component');
 //import {Route1, Route2, Home} from './app.routes.components';
 //import {ComponentStub1} from './componentStub1';
 var AppModule = (function () {
@@ -30,7 +36,8 @@ var AppModule = (function () {
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, http_1.HttpModule, app_routes_1.Routing, forms_1.FormsModule],
             declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, managePassword_component_1.ForgotPassword,
-                managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount],
+                managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount,
+                profile_component_1.Profile, approve_component_1.Approve, receipt_component_1.Receipt, orderHistory_component_1.OrderHistory, shippingAddress_component_1.ShippingAddress, PaymentMethod_component_1.PaymentMethod],
             providers: [app_service_1.AppService, app_service_1.LoginGuard],
             bootstrap: [app_component_1.AppComponent]
         }), 

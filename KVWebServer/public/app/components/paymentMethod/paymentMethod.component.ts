@@ -3,9 +3,9 @@ import { Subscription } from 'rxjs/subscription';
 import { AppService } from '../../services/app.service';
 
 @Component({
-    templateUrl: 'app/components/orderHistory/orderHistory.component.html'
+    templateUrl: 'app/components/paymentMethod/paymentMethod.component.html'
 })
-export class OrderHistory {
+export class PaymentMethod {
    
     subscription: Subscription;
     constructor(private appService: AppService) {

@@ -4,6 +4,12 @@ var login_component_1 = require('../login/login.component');
 var createAccount_component_1 = require('../createAccount/createAccount.component');
 var managePassword_component_1 = require('../managePassword/managePassword.component');
 var order_component_1 = require('../order/order.component');
+var profile_component_1 = require('../profile/profile.component');
+var approve_component_1 = require('../approve/approve.component');
+var receipt_component_1 = require('../receipt/receipt.component');
+var orderHistory_component_1 = require('../orderHistory/orderHistory.component');
+var shippingAddress_component_1 = require('../shippingAddress/shippingAddress.component');
+var PaymentMethod_component_1 = require('../PaymentMethod/PaymentMethod.component');
 var app_service_1 = require('../../services/app.service');
 var routes = [
     {
@@ -36,6 +42,36 @@ var routes = [
     {
         path: 'create/account',
         component: createAccount_component_1.CreateAccount
+    },
+    {
+        path: 'profile',
+        component: profile_component_1.Profile,
+        canActivate: [app_service_1.LoginGuard]
+    },
+    {
+        path: 'approve',
+        component: approve_component_1.Approve,
+        canActivate: [app_service_1.LoginGuard]
+    },
+    {
+        path: 'receipt',
+        component: receipt_component_1.Receipt,
+        canActivate: [app_service_1.LoginGuard]
+    },
+    {
+        path: 'order/history',
+        component: orderHistory_component_1.OrderHistory,
+        canActivate: [app_service_1.LoginGuard]
+    },
+    {
+        path: 'shipping/address',
+        component: shippingAddress_component_1.ShippingAddress,
+        canActivate: [app_service_1.LoginGuard]
+    },
+    {
+        path: 'payment/method',
+        component: PaymentMethod_component_1.PaymentMethod,
+        canActivate: [app_service_1.LoginGuard]
     },
     {
         path: '**',

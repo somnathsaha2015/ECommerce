@@ -72,7 +72,7 @@ router.post('/api/send/password', function (req, res, next) {
                     emailItem.subject = config.forgotPassword.subject;
                     emailItem.to = decoded.data;
                     var data = { action: 'new:password', data: emailItem, };
-                    handler.edgePush(res, next, 'new:password', data);
+                    handler.edgePush(res, next, 'common:result', data);
 
                     // let random = crypto.randomBytes(4).toString('hex');
                     // let url = `<a href='${config.host}'>${config.host}</a>`;
@@ -116,7 +116,7 @@ router.post('/api/create/account', function (req, res, next) {
         let account = req.body;
         if (account) {
             let data = { action: 'create:account', account: account };
-            handler.edgePush(res, next, 'create:account', data);
+            handler.edgePush(res, next, 'common:result', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
@@ -165,7 +165,7 @@ router.post('/api/change/password', function (req, res, next) {
                 action: 'change:password', auth: auth
                 , emailItem: emailItem
             };
-            handler.edgePush(res, next, 'change:password', data);
+            handler.edgePush(res, next, 'common:result', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
@@ -188,7 +188,7 @@ router.get('/api/current/offer', function (req, res, next) {
 router.post('/api/order', function (req, res,next) {
     try {
         let data = { action: 'save:order', order: req.body.order, email: req.user.email };
-        handler.edgePush(res, next, 'save:order', data);
+        handler.edgePush(res, next, 'common:result', data);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);

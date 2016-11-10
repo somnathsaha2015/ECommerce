@@ -10,22 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var app_service_1 = require('../../services/app.service');
-var Approve = (function () {
-    function Approve(appService) {
+var PaymentMethod = (function () {
+    function PaymentMethod(appService) {
         this.appService = appService;
     }
     ;
-    Approve.prototype.ngOnDestroy = function () {
+    PaymentMethod.prototype.ngOnDestroy = function () {
         //this.subscription.unsubscribe();
     };
     ;
-    Approve = __decorate([
+    PaymentMethod = __decorate([
         core_1.Component({
-            templateUrl: 'app/components/approve/approve.component.html'
+            templateUrl: 'app/components/paymentMethod/paymentMethod.component.html'
         }), 
         __metadata('design:paramtypes', [app_service_1.AppService])
-    ], Approve);
-    return Approve;
+    ], PaymentMethod);
+    return PaymentMethod;
 }());
-exports.Approve = Approve;
-//# sourceMappingURL=approve.component.js.map
+exports.PaymentMethod = PaymentMethod;
+//# sourceMappingURL=PaymentMethod.component.js.map

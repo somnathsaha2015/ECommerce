@@ -21,13 +21,16 @@ export class AppService {
     subject: Subject<any>;
     channel: any;    
     globalHash: {} = {};
+    
     constructor(private http: Http) {
         this.subject = new Subject();
         this.channel = {};
     };
-    getMessage(messageKey){
+    
+    getMessage(messageKey) {
         return(messages[messageKey]);
     }
+
     setCredential(email, token) {
         let credential = { email: email, token: token };
         localStorage.setItem('credential', JSON.stringify(credential));
@@ -51,6 +54,7 @@ export class AppService {
     resetCredential() {
         localStorage.removeItem('credential');
     };
+
     httpPost(id: string, body?: {}) {
         let url = urlHash[id];
         this.http.post(url, body)
@@ -83,6 +87,12 @@ export class AppService {
                     data: { error: err }
                 }));
     };
+    //application wide events
+    emit(id: string, options?: any) {
+        this.subject.next({
+            id: id, data: options
+        });
+    }
     
     filterOn(id: string): Observable<any> {
         return (this.subject.filter(d => (d.id === id)));

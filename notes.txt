@@ -1,52 +1,36 @@
-//Immediate work
-		1. .NET mail
-		2. In Transaction mail
-		3. Create New Password
-		4. Forgot Pwd
-5. Create New Account
-6. Create Order
-7. Confirm Order
-8. Receipt Order
-9. Wizard
-10. Wait show
-11. Client side validations
-12. Speed up RXjs
-		13. JWT duration 24 hours
-		14. replace new HTML's
+//updated from Tanmoy
+1. login
+2. order
 
-//Authentication
-https://medium.com/@blacksonic86/angular-2-authentication-revisited-611bf7373bf9#.3c66v2lzc
-hash: dea5687d7786d43266cf55d7be014530
-Research
-1. Auto include token in page
-2. Customer database
-3. Git hub manage
-4. Node js surround all methods with try / catch. That will prevent node server from crashing.
+//New component steps
+1. Create .component.ts
+2. Create .html.ts
+3. app.module.ts
+4. app.router.ts
+5. config.ts: ViewBox for top menu
 
-Work
-Client
-1. Login page
-2. Order page
-3. Confirm order page
-4. receipt page
-5. Modify User Profile page
-6. Address modify page
-7. Credit card page
-8. Create / block Admin User
-9. New Arrivals
-10. Order History
-11. Reset password
-12. New User
-13. Logout
+6. If secured then provide LoginGuard in router.ts
 
-Node Server
-1. Token validator
+//Blank Component
+import { Component } from '@angular/core';
+import { Subscription } from 'rxjs/subscription';
+import { AppService } from '../../services/app.service';
 
+@Component({
+    templateUrl: 'app/components/*****/****.component.html'
+})
+export class ***** {
+   
+    subscription: Subscription;
+    constructor(private appService: AppService) {
+        
+    };
+    
+    ngOnDestroy() {
+        //this.subscription.unsubscribe();
+    };
+}
 
-.NET server
-1. New user save
-2. Order save
-3. Get order history
 
 
 Status codes

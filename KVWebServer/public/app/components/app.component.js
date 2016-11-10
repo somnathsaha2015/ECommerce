@@ -9,22 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var app_service_1 = require('../services/app.service');
+var config_1 = require('../config');
 //import * as Rx from 'rxjs/rx';
-//import {AppService} from './app.service';
-//import * as all from './experiment';
-//import {MyClass} from "./experiment";
-//import {ComponentStub1} from "./componentStub1";
-//
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(appService, router) {
+        //Catching up Router event by name 'NavigationEnd'
+        var _this = this;
+        this.appService = appService;
+        this.router = router;
+        this.viewBox = config_1.viewBoxConfig['/login'];
+        // router.events.filter((e: any) => {
+        router.events.filter(function (e, t) {
+            return (e.constructor.name === 'NavigationEnd');
+        }).subscribe(function (event) {
+            var url = event.urlAfterRedirects.split('?')[0];
+            _this.viewBox = config_1.viewBoxConfig[url];
+        });
     }
     ;
+    AppComponent.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
             templateUrl: 'app/components/app.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
     ], AppComponent);
     return AppComponent;
 }());
