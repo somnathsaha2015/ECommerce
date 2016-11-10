@@ -19,7 +19,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 var router = require('./artifacts/router');
 app.use(router);
 router.init(app);
-
 process.env.NODE_ENV = config.env;
 
 //for cross domain
